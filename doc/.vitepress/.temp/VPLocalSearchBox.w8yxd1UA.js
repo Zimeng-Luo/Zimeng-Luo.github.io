@@ -3,10 +3,10 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { shallowRef, computed, toValue, watch, defineComponent, ref, watchEffect, onMounted, nextTick, onBeforeUnmount, unref, markRaw, createApp, useSSRContext } from "vue";
 import { ssrRenderTeleport, ssrRenderAttr, ssrRenderClass, ssrIncludeBooleanAttr, ssrRenderList, ssrInterpolate } from "vue/server-renderer";
-import { v as toArray, x as unrefElement, y as notNullish, z as tryOnScopeDispose, A as computedAsync, B as useSessionStorage, D as useLocalStorage, F as watchDebounced, f as onKeyStroke, a as useRouter, G as useEventListener, k as useScrollLock, q as dataSymbol, p as pathToFile, j as inBrowser, H as escapeRegExp } from "./Content.BxdRV_h7.js";
+import { v as toArray, x as unrefElement, y as notNullish, z as tryOnScopeDispose, A as computedAsync, B as useSessionStorage, D as useLocalStorage, F as watchDebounced, f as onKeyStroke, a as useRouter, G as useEventListener, k as useScrollLock, q as dataSymbol, p as pathToFile, j as inBrowser, H as escapeRegExp } from "./Content.CsTGD5Fi.js";
 import { u as useData, c as createSearchTranslate } from "./app.js";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const localSearchIndex = { "root": () => import("./@localSearchIndexroot.F3uga8cy.js") };
+const localSearchIndex = { "root": () => import("./@localSearchIndexroot.DJhB3Rt-.js") };
 /*!
 * tabbable 6.5.0
 * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE

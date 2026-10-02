@@ -1,4 +1,4 @@
-import { defineTeekConfig } from "vitepress-theme-teek/config";
+﻿import { defineTeekConfig } from "vitepress-theme-teek/config";
 
 export const teekConfig = defineTeekConfig({
   author: {

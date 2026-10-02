@@ -1,7 +1,7 @@
 import { ssrRenderAttrs, ssrRenderSlot, ssrInterpolate, ssrRenderAttr, ssrRenderComponent, ssrRenderList, ssrRenderVNode, ssrRenderClass, renderToString } from "vue/server-renderer";
 import * as Vue from "vue";
 import { defineComponent, mergeProps, useSSRContext, onBeforeMount, nextTick, computed, unref, ref, watch, onMounted, watchEffect, watchPostEffect, onUnmounted, onUpdated, resolveComponent, shallowRef, createVNode, resolveDynamicComponent, withCtx, renderSlot, createTextVNode, toDisplayString as toDisplayString$1, inject, openBlock, createBlock, createCommentVNode, readonly, Fragment, renderList, defineAsyncComponent, provide, toHandlers, withKeys, onBeforeUnmount, useSlots, getCurrentScope, onScopeDispose, toValue, getCurrentInstance, reactive, isRef as isRef$1, h, createElementBlock, normalizeClass as normalizeClass$1, createElementVNode, useId, createPropsRestProxy, toRaw, normalizeStyle as normalizeStyle$1, shallowReactive, Transition, withDirectives, withModifiers, vShow, mergeDefaults, isVNode, render as render$2, useModel, markRaw, vModelDynamic, vModelText, mergeModels, useTemplateRef, normalizeProps as normalizeProps$1, guardReactiveProps, TransitionGroup, createStaticVNode, createSlots, effectScope, Teleport, createApp as createApp$1, vModelRadio, createSSRApp } from "vue";
-import { a as useRouter, u as useData$1, i as isExternal$1, t as treatAsHtml, w as withBase, b as isActive, c as useMediaQuery$1, g as getScrollOffset, o as onContentUpdated, E as EXTERNAL_URL_RE, d as useRoute, e as useWindowSize$1, f as onKeyStroke, h as useWindowScroll, j as inBrowser, k as useScrollLock, l as createTitle, m as mergeHead, p as pathToFile, R as RouterSymbol, n as initData, q as dataSymbol, C as Content, s as siteDataRef, r as createRouter } from "./Content.BxdRV_h7.js";
+import { a as useRouter, u as useData$1, i as isExternal$1, t as treatAsHtml, w as withBase, b as isActive, c as useMediaQuery$1, g as getScrollOffset, o as onContentUpdated, E as EXTERNAL_URL_RE, d as useRoute, e as useWindowSize$1, f as onKeyStroke, h as useWindowScroll, j as inBrowser, k as useScrollLock, l as createTitle, m as mergeHead, p as pathToFile, R as RouterSymbol, n as initData, q as dataSymbol, C as Content, s as siteDataRef, r as createRouter } from "./Content.CsTGD5Fi.js";
 import { _ as _export_sfc$1 } from "./plugin-vue_export-helper.1tPrXgE0.js";
 const _sfc_main$2G = /* @__PURE__ */ defineComponent({
   __name: "VPBadge",
@@ -2784,7 +2784,7 @@ const _sfc_main$21 = /* @__PURE__ */ defineComponent({
   __name: "VPNavBarSearch",
   __ssrInlineRender: true,
   setup(__props) {
-    const VPLocalSearchBox = defineAsyncComponent(() => import("./VPLocalSearchBox.DP95Okl3.js"));
+    const VPLocalSearchBox = defineAsyncComponent(() => import("./VPLocalSearchBox.w8yxd1UA.js"));
     const VPAlgoliaSearchBox = () => null;
     const { theme: theme2 } = useData();
     const loaded = ref(false);

@@ -1,8 +1,9 @@
-import { defineConfig } from "vitepress";
+﻿import { defineConfig } from "vitepress";
 import { teekConfig } from "./teek-config.mts";
 
 export default defineConfig({
   extends: teekConfig,
+  base: "/",
   lang: "zh-CN",
   title: "未拾获的星光",
   description: "慢品人间烟火色，闲观万事岁月长",
@@ -29,6 +30,9 @@ export default defineConfig({
     },
     outline: "deep",
     search: { provider: "local" },
+    socialLinks: [
+      { icon: "github", link: "https://github.com/Zimeng-Luo" },
+    ],
     footer: {
       message: "慢品人间烟火色，闲观万事岁月长",
       copyright: "Copyright © 2026 未拾获的星光",

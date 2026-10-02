@@ -1,7 +1,7 @@
 import { useSSRContext, unref } from "vue";
 import { ssrRenderAttrs, ssrRenderStyle, ssrInterpolate } from "vue/server-renderer";
-import { u as useData } from "./Content.BxdRV_h7.js";
-const __pageData = JSON.parse('{"title":"Runtime API Examples","description":"","frontmatter":{"outline":"deep"},"headers":[],"relativePath":"api-examples.md","filePath":"api-examples.md","lastUpdated":null}');
+import { u as useData } from "./Content.CsTGD5Fi.js";
+const __pageData = JSON.parse('{"title":"Runtime API Examples","description":"","frontmatter":{"outline":"deep"},"headers":[],"relativePath":"api-examples.md","filePath":"api-examples.md","lastUpdated":1790954545000}');
 const __default__ = { name: "api-examples.md" };
 const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
   __ssrInlineRender: true,
