@@ -21,17 +21,18 @@ export const teekConfig = defineTeekConfig({
   blogger: {
     name: "\u7F57\u6893\u840C",
     avatar: "https://github.com/Zimeng-Luo.png",
-    slogan: "\u6162\u54C1\u4EBA\u95F4\u70DF\u706B\u8272\uFF0C\u95F2\u89C2\u4E07\u4E8B\u5C81\u6708\u957F",
     shape: "circle",
   },
   banner: {
     enabled: true,
-    name: "\u672A\u62FE\u83B7\u7684\u661F\u5149",
+    name: "\u2B50\u672A\u62FE\u83B7\u7684\u661F\u5149\u2B50",
     bgStyle: "fullImg",
     imgSrc: blogImages,
     imgInterval: 30000,
     imgShuffle: true,
     imgWaves: true,
+    descStyle: "types",
+    description: "\u6162\u54C1\u4EBA\u95F4\u70DF\u706B\u8272\uFF0C\u95F2\u89C2\u4E07\u4E8B\u5C81\u6708\u957F",
   },
   pageStyle: "default",
   themeEnhance: {
@@ -46,6 +47,10 @@ export const teekConfig = defineTeekConfig({
     coverImgMode: "full",
     defaultCoverImg: blogImages,
   },
+  friendLink: {
+    enabled: false,
+  },
+  homeCardSort: ["topArticle", "category", "tag", "docAnalysis"],
   articleBanner: {
     enabled: true,
     showCategory: true,
