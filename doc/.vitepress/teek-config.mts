@@ -91,6 +91,9 @@ export const teekConfig = defineTeekConfig({
   viewTransition: {
     enabled: true,
   },
+  windowTransition: {
+    post: false,
+  },
   docAnalysis: {
     enabled: true,
     wordCount: true,

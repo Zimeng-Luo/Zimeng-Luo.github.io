@@ -9,10 +9,25 @@ export default {
     if (typeof window === "undefined") return;
 
     let currentSearch = window.location.search;
+    let switching = false;
     const refreshPostList = () => {
-      if (currentSearch === window.location.search) return;
+      if (currentSearch === window.location.search || switching) return;
       currentSearch = window.location.search;
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      const list = document.querySelector(".tk-post > ul");
+      if (!list) return;
+      switching = true;
+      list.classList.add("tk-post-query-leave");
+      window.setTimeout(() => {
+        window.dispatchEvent(new Event("teek-query-change"));
+        window.setTimeout(() => {
+          list.classList.remove("tk-post-query-leave");
+          list.classList.add("tk-post-query-enter");
+          window.setTimeout(() => {
+            list.classList.remove("tk-post-query-enter");
+            switching = false;
+          }, 260);
+        }, 30);
+      }, 260);
     };
 
     const originalPushState = window.history.pushState.bind(window.history);
@@ -21,5 +36,8 @@ export default {
       refreshPostList();
     };
     window.addEventListener("popstate", refreshPostList);
+    window.addEventListener("teek-query-change", () => {
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
   },
 };

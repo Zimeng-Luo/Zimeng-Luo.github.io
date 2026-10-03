@@ -38,3 +38,27 @@
     display: none;
   }
 }
+
+.tk-post > ul {
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.tk-post-query-leave {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.tk-post-query-enter {
+  animation: tk-post-query-enter 260ms ease both;
+}
+
+@keyframes tk-post-query-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
