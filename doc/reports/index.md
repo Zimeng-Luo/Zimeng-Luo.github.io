@@ -1,16 +1,14 @@
 ﻿---
 title: "报告"
-layout: page
+layout: home
 post:
-  postStyle: card
-article: false
-sectionCategory: 报告
+  postStyle: list
+categoriesPage: true
 hero: false
 features: false
 sidebar: false
 homeCardListPosition: false
 ---
 
-<CategoryPostList />
 
 

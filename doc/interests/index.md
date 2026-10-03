@@ -1,16 +1,14 @@
 ﻿---
 title: "兴趣"
-layout: page
+layout: home
 post:
-  postStyle: card
-article: false
-sectionCategory: 兴趣
+  postStyle: list
+categoriesPage: true
 hero: false
 features: false
 sidebar: false
 homeCardListPosition: false
 ---
 
-<CategoryPostList />
 
 

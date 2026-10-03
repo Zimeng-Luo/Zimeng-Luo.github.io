@@ -1,16 +1,14 @@
 ﻿---
 title: "笔记"
-layout: page
+layout: home
 post:
-  postStyle: card
-article: false
-sectionCategory: 笔记
+  postStyle: list
+categoriesPage: true
 hero: false
 features: false
 sidebar: false
 homeCardListPosition: false
 ---
 
-<CategoryPostList />
 
 
