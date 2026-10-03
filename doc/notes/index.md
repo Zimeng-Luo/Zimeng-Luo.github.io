@@ -2,7 +2,7 @@
 title: "笔记"
 layout: page
 post:
-  postStyle: list
+  postStyle: card
 article: false
 sectionCategory: 笔记
 hero: false

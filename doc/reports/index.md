@@ -2,7 +2,7 @@
 title: "报告"
 layout: page
 post:
-  postStyle: list
+  postStyle: card
 article: false
 sectionCategory: 报告
 hero: false

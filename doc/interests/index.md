@@ -2,7 +2,7 @@
 title: "兴趣"
 layout: page
 post:
-  postStyle: list
+  postStyle: card
 article: false
 sectionCategory: 兴趣
 hero: false
