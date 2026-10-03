@@ -46,6 +46,7 @@
 .tk-post-query-leave {
   opacity: 0;
   transform: translateY(8px);
+  pointer-events: none;
 }
 
 .tk-post-query-enter {

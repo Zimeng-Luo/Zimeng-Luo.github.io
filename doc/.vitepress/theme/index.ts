@@ -19,14 +19,6 @@ export default {
       list.classList.add("tk-post-query-leave");
       window.setTimeout(() => {
         window.dispatchEvent(new Event("teek-query-change"));
-        window.setTimeout(() => {
-          list.classList.remove("tk-post-query-leave");
-          list.classList.add("tk-post-query-enter");
-          window.setTimeout(() => {
-            list.classList.remove("tk-post-query-enter");
-            switching = false;
-          }, 260);
-        }, 30);
       }, 260);
     };
 
@@ -37,7 +29,14 @@ export default {
     };
     window.addEventListener("popstate", refreshPostList);
     window.addEventListener("teek-query-change", () => {
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      const list = document.querySelector(".tk-post > ul");
+      if (!list) return;
+      list.classList.remove("tk-post-query-leave");
+      list.classList.add("tk-post-query-enter");
+      window.setTimeout(() => {
+        list.classList.remove("tk-post-query-enter");
+        switching = false;
+      }, 260);
     });
   },
 };
