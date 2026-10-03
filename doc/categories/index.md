@@ -1,11 +1,7 @@
 ---
-title: "分类"
-layout: home
-post:
-  postStyle: card
+title: 分类
 categoriesPage: true
-hero: false
-features: false
-sidebar: false
+permalink: /categories
+article: false
+layout: home
 ---
-
