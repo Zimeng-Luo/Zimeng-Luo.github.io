@@ -4,3 +4,37 @@
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
+
+.tk-post-item-list .list {
+  align-items: stretch;
+  min-height: 220px;
+}
+
+.tk-post-item-list__right {
+  align-self: stretch;
+  flex: 0 0 min(42%, 480px);
+  min-height: 220px;
+}
+
+.tk-post-item-list__right .cover.full {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.tk-post-item-list__right .cover.full .cover-img {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  height: 100%;
+  max-width: none;
+  min-height: 220px;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .tk-post-item-list__right {
+    display: none;
+  }
+}
