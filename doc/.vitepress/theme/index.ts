@@ -8,35 +8,22 @@ export default {
     await Teek.enhanceApp?.(ctx);
     if (typeof window === "undefined") return;
 
-    let currentSearch = window.location.search;
-    let switching = false;
-    const refreshPostList = () => {
-      if (currentSearch === window.location.search || switching) return;
-      currentSearch = window.location.search;
-      const list = document.querySelector(".tk-post > ul");
-      if (!list) return;
-      switching = true;
-      list.classList.add("tk-post-query-leave");
-      window.setTimeout(() => {
-        window.dispatchEvent(new Event("teek-query-change"));
-      }, 260);
+    let currentUrl = window.location.href;
+    const isFilterPage = () =>
+      window.location.pathname === "/categories/" ||
+      window.location.pathname === "/tags/";
+    const reloadAfterFilterChange = () => {
+      const nextUrl = window.location.href;
+      if (nextUrl === currentUrl || !isFilterPage()) return;
+      currentUrl = nextUrl;
+      window.location.reload();
     };
 
     const originalPushState = window.history.pushState.bind(window.history);
     window.history.pushState = (...args) => {
       originalPushState(...args);
-      refreshPostList();
+      reloadAfterFilterChange();
     };
-    window.addEventListener("popstate", refreshPostList);
-    window.addEventListener("teek-query-change", () => {
-      const list = document.querySelector(".tk-post > ul");
-      if (!list) return;
-      list.classList.remove("tk-post-query-leave");
-      list.classList.add("tk-post-query-enter");
-      window.setTimeout(() => {
-        list.classList.remove("tk-post-query-enter");
-        switching = false;
-      }, 260);
-    });
+    window.addEventListener("popstate", reloadAfterFilterChange);
   },
 };
