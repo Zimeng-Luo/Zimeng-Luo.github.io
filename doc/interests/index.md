@@ -1,5 +1,5 @@
 ﻿---
-title: "鍏磋叮"
+title: "兴趣"
 layout: home
 post:
   postStyle: card

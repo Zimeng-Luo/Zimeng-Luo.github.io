@@ -1,11 +1,11 @@
-﻿---
-title: "鍒嗙被"
+---
+title: "分类"
 layout: home
-categoriesPage: true
-sidebar: false
-homeCardListPosition: false
 post:
-  postStyle: list
-  transition: false
+  postStyle: card
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
 ---
 

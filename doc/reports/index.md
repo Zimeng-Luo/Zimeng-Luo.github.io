@@ -1,5 +1,5 @@
 ﻿---
-title: "鎶ュ憡"
+title: "报告"
 layout: home
 post:
   postStyle: card

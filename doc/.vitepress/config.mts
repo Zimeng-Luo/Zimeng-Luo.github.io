@@ -18,8 +18,6 @@ export default defineConfig({
       { text: "笔记", link: "/notes/?category=%E7%AC%94%E8%AE%B0" },
       { text: "报告", link: "/reports/?category=%E6%8A%A5%E5%91%8A" },
       { text: "兴趣", link: "/interests/?category=%E5%85%B4%E8%B6%A3" },
-      { text: "分类", link: "/categories/" },
-      { text: "标签", link: "/tags/" },
       { text: "归档", link: "/archives/" },
     ],
     sidebar: false,

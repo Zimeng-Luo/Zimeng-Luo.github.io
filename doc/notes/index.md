@@ -1,5 +1,5 @@
 ﻿---
-title: "绗旇"
+title: "笔记"
 layout: home
 post:
   postStyle: card
