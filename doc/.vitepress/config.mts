@@ -5,7 +5,7 @@ export default defineConfig({
   extends: teekConfig,
   base: "/",
   lang: "zh-CN",
-  title: "未拾获的星光",
+  title: "⭐未拾获的星光⭐",
   description: "慢品人间烟火色，闲观万事岁月长",
   cleanUrls: true,
   lastUpdated: true,
@@ -14,20 +14,12 @@ export default defineConfig({
     siteTitle: "未拾获的星光",
     nav: [
       { text: "首页", link: "/" },
-      { text: "文章", link: "/markdown-examples" },
-      { text: "关于", link: "/api-examples" },
+      { text: "分享", link: "/share/" },
+      { text: "笔记", link: "/notes/" },
+      { text: "报告", link: "/reports/" },
+      { text: "兴趣", link: "/interests/" },
     ],
-    sidebar: {
-      "/": [
-        {
-          text: "开始阅读",
-          items: [
-            { text: "Markdown 示例", link: "/markdown-examples" },
-            { text: "API 示例", link: "/api-examples" },
-          ],
-        },
-      ],
-    },
+    sidebar: false,
     outline: "deep",
     search: { provider: "local" },
     socialLinks: [
