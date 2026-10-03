@@ -1,3 +1,10 @@
-# 报告
+---
+title: 报告
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-这里整理项目报告、调研报告和阶段性总结。

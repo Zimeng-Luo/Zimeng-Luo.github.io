@@ -47,6 +47,9 @@ export const teekConfig = defineTeekConfig({
     coverImgMode: "full",
     defaultCoverImg: blogImages,
   },
+  page: {
+    pageSize: 10,
+  },
   friendLink: {
     enabled: false,
   },

@@ -1,13 +1,10 @@
 ---
 title: 工具与资源
-date: 2026-10-03
-categories:
-  - 分享
-  - 工具
-tags:
-  - 工具
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
 ---
 
-# 工具与资源
-
-这里记录值得分享的工具、网站和资源。

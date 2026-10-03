@@ -1,3 +1,10 @@
-# 兴趣
+---
+title: 兴趣
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-这里记录个人兴趣、游戏、影视和生活内容。

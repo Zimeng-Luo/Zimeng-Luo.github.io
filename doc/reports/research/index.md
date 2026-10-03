@@ -1,3 +1,10 @@
-# 研究报告
+---
+title: 研究报告
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-用于整理研究过程、实验结果和分析报告。

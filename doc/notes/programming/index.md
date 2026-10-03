@@ -1,3 +1,10 @@
-# 编程笔记
+---
+title: 编程笔记
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-用于整理编程、开发和工程实践相关内容。

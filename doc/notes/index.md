@@ -1,3 +1,10 @@
-# 笔记
+---
+title: 笔记
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-这里记录学习过程中的知识点和实践笔记。

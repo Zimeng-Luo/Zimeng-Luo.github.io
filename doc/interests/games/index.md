@@ -1,3 +1,10 @@
-# 游戏与娱乐
+---
+title: 游戏与娱乐
+layout: home
+categoriesPage: true
+hero: false
+features: false
+sidebar: false
+homeCardListPosition: false
+---
 
-用于整理游戏体验、角色记录和娱乐内容。
