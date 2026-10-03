@@ -1,6 +1,8 @@
 ---
 title: 分享
 layout: home
+post:
+  postStyle: list
 categoriesPage: true
 hero: false
 features: false
