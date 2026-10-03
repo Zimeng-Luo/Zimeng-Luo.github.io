@@ -1,8 +1,6 @@
 ---
 title: "归档"
-layout: home
-post:
-  postStyle: card
+layout: TkArchivesPage
 archivesPage: true
 hero: false
 features: false

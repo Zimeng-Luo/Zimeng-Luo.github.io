@@ -2,7 +2,7 @@
 title: "兴趣"
 layout: home
 post:
-  postStyle: card
+  postStyle: list
 categoriesPage: true
 hero: false
 features: false
