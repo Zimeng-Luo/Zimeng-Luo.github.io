@@ -1,13 +1,16 @@
 ﻿---
 title: "分享"
-layout: home
+layout: page
 post:
   postStyle: list
-categoriesPage: true
+article: false
+sectionCategory: 分享
 hero: false
 features: false
 sidebar: false
 homeCardListPosition: false
 ---
+
+<CategoryPostList />
 
 
