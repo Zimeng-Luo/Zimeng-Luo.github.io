@@ -41,10 +41,10 @@ export const teekConfig = defineTeekConfig({
     },
   },
   post: {
-    postStyle: "list",
+    postStyle: "card",
     showMore: true,
     showCapture: true,
-    coverImgMode: "full",
+    coverImgMode: "small",
     defaultCoverImg: blogImages,
     transition: false,
   },

@@ -2,7 +2,7 @@
 title: "鍒嗕韩"
 layout: home
 post:
-  postStyle: list
+  postStyle: card
 categoriesPage: true
 hero: false
 features: false

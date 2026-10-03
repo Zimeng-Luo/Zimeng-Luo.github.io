@@ -1,14 +1,6 @@
-/* Keep list cards stable with the cover image on the left. */
-.tk-post-item-list .list {
-  flex-direction: row-reverse;
-}
-
-.tk-post-item-list .tk-post-item-list__right .cover-img {
-  clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
-}
-
-@media (max-width: 640px) {
-  .tk-post-item-list .list {
-    flex-direction: row;
-  }
+/* Keep card covers stable and proportional while images load. */
+.tk-post-item-card .cover,
+.tk-post-item-card .cover img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }

@@ -1,150 +1,135 @@
 ---
-title: "02 LaTeX璇硶"
+title: 02 LaTeX语法
 date: 2026-09-02
 categories: ["分享", "工具", "Markdown与LaTeX"]
 tags: ["Markdown与LaTeX", "工具"]
 sidebar: false
 ---
-锘?--
-title: "02 LaTeX璇硶"
-type: reference
-status: usable
-confidence: medium
-source: self-note
-updated: 2026-09-02
-tags: ["Markdown与LaTeX", "工具"]
-  - latex
-  - reference
-  - markdown涓巐atex
-  - 璁烘枃鍐欎綔
-  - 鏂囨。鎺掔増
----
-# LaTeX 璇硶
 
-## 鏍稿績鎽樿
+# LaTeX 语法
 
-鏈瘒鐢ㄤ簬鏌ラ槄 LaTeX 璁烘枃鍐欎綔鐨勫熀纭€缁撴瀯锛屽寘鎷枃妗ｉ鏋躲€佸父鐢ㄥ畯鍖呫€佹爣棰樺眰绾с€佸垪琛ㄦ帓鐗堛€佸浘鐗囨彃鍏ュ拰 BibTeX 鍙傝€冩枃鐚鐞嗐€?
+## 核心摘要
 
-浣跨敤 LaTeX 鍐欒鏂囦竴鑸娇鐢?Overleaf銆?
+本篇用于查阅 LaTeX 论文写作的基础结构，包括文档骨架、常用宏包、标题层级、列表排版、图片插入和 BibTeX 参考文献管理。
+
+使用 LaTeX 写论文一般使用 Overleaf。
 
 [overleaf](https://www.overleaf.com/project)
 
-## 1. 鏂囨。鍩虹楠ㄦ灦
+## 1. 文档基础骨架
 
-浠讳綍涓€涓爣鍑嗙殑 LaTeX 鏂囨。閮界敱**瀵艰█鍖?*锛圥reamble锛岀敤浜庡叏灞€璁剧疆鍜屽紩鍏ュ畯鍖咃級鍜?*姝ｆ枃鍖?*锛圖ocument Environment锛夌粍鎴愩€?
+任何一个标准的 LaTeX 文档都由**导言区**（Preamble，用于全局设置和引入宏包）和**正文区**（Document Environment）组成。
 
 ```latex
-% --- 瀵艰█鍖哄紑濮?---
-\documentclass[12pt,a4paper,UTF8]{article} % 12鍙峰瓧浣擄紝A4绾稿紶锛孶TF-8缂栫爜锛宎rticle绫?
-\usepackage{ctex} % 蹇呴』寮曞叆锛岀敤浜庢敮鎸佷腑鏂囨帓鐗?
-% ... 姝ゅ寮曞叆鍏朵粬瀹忓寘 ...
-% --- 瀵艰█鍖虹粨鏉?---
+% --- 导言区开始 ---
+\documentclass[12pt,a4paper,UTF8]{article} % 12号字体，A4纸张，UTF-8编码，article类
+\usepackage{ctex} % 必须引入，用于支持中文排版
+% ... 此处引入其他宏包 ...
+% --- 导言区结束 ---
 
-% --- 姝ｆ枃鍖哄紑濮?---
+% --- 正文区开始 ---
 \begin{document}
 
-% 浣犵殑璁烘枃姝ｆ枃鍐呭鍐欏湪杩欓噷
+% 你的论文正文内容写在这里
 
 \end{document}
-% --- 姝ｆ枃鍖虹粨鏉?---
+% --- 正文区结束 ---
 ```
 
-## 2. 甯哥敤蹇呭瀹忓寘锛圥ackages锛?
+## 2. 常用必备宏包（Packages）
 
-鏍规嵁浣犵殑婧愮爜锛屼互涓嬫槸浣犲啓璁烘枃鏃堕€氬父闇€瑕侀厤缃殑瀹忓寘鍙婂姛鑳借鏄庯細
+根据你的源码，以下是你写论文时通常需要配置的宏包及功能说明：
 
-| **瀹忓寘浠ｇ爜**                                     | **鏍稿績浣滅敤**                           |
+| **宏包代码**                                     | **核心作用**                           |
 | -------------------------------------------- | ---------------------------------- |
-| `\usepackage{amsmath}`                       | 鎻愪緵楂樼骇鏁板鍏紡鎺掔増鏀寔銆?                     |
-| `\usepackage{graphicx}`                      | 鍏佽鎻掑叆鍥剧墖锛堥厤鍚?`\includegraphics` 浣跨敤锛夈€? |
-| `\usepackage{float}`                         | 鎻愪緵涓ユ牸鐨勫浘琛ㄤ綅缃帶鍒讹紙濡傚己鍒跺浐瀹氬湪褰撳墠浣嶇疆鐨?`[H]` 鍙傛暟锛夈€?|
-| `\usepackage{geometry}`                      | 鐢ㄤ簬鑷畾涔夐〉闈㈣竟璺濄€?                        |
-| `\usepackage[numbers,sort&compress]{natbib}` | 寮哄ぇ鐨勫弬鑰冩枃鐚鐞嗭紝鏀寔鏁板瓧鏍囧彿鍜岃繛缁簭鍙峰帇缂╋紙濡?[1-3]锛夈€? |
-| `\usepackage{url}`                           | 鍏佽鍦ㄥ弬鑰冩枃鐚垨姝ｆ枃涓牸寮忓寲鏄剧ず鍜岀偣鍑?URL 閾炬帴銆?       |
+| `\usepackage{amsmath}`                       | 提供高级数学公式排版支持。                      |
+| `\usepackage{graphicx}`                      | 允许插入图片（配合 `\includegraphics` 使用）。  |
+| `\usepackage{float}`                         | 提供严格的图表位置控制（如强制固定在当前位置的 `[H]` 参数）。 |
+| `\usepackage{geometry}`                      | 用于自定义页面边距。                         |
+| `\usepackage[numbers,sort&compress]{natbib}` | 强大的参考文献管理，支持数字标号和连续序号压缩（如 [1-3]）。  |
+| `\usepackage{url}`                           | 允许在参考文献或正文中格式化显示和点击 URL 链接。        |
 
-**椤甸潰杈硅窛璁剧疆绀轰緥锛?*
+**页面边距设置示例：**
 
 ```latex
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 ```
 
-## 3. 鏍囬涓庡绾х粨鏋?
+## 3. 标题与多级结构
 
-LaTeX 浼氳嚜鍔ㄤ负浣犲鐞嗙珷鑺傜紪鍙峰拰瀛椾綋澶у皬銆?
+LaTeX 会自动为你处理章节编号和字体大小。
 
 ```latex
-% --- 璁烘枃澶ф爣棰樿嚜瀹氫箟灞呬腑 ---
+% --- 论文大标题自定义居中 ---
 \begin{center}
-    \textbf{\huge 绔嬮」鎶ュ憡} % \huge 琛ㄧず瓒呭ぇ鍙峰瓧浣擄紝\textbf 涓哄姞绮?
+    \textbf{\huge 立项报告} % \huge 表示超大号字体，\textbf 为加粗
 \end{center}
-\vspace{1em} % 鎵嬪姩澧炲姞 1em 鐨勫瀭鐩寸┖鐧介棿璺?
+\vspace{1em} % 手动增加 1em 的垂直空白间距
 
-% --- 绔犺妭灞傜骇 ---
-\section{绔嬮」鑳屾櫙}       % 涓€绾ф爣棰?(渚嬪锛? 绔嬮」鑳屾櫙)
-\subsection{闃舵涓€}      % 浜岀骇鏍囬 (渚嬪锛?.1 闃舵涓€)
-\subsubsection{鍏蜂綋浠诲姟} % 涓夌骇鏍囬 (渚嬪锛?.1.1 鍏蜂綋浠诲姟)
+% --- 章节层级 ---
+\section{立项背景}       % 一级标题 (例如：1 立项背景)
+\subsection{阶段一}      % 二级标题 (例如：1.1 阶段一)
+\subsubsection{具体任务} % 三级标题 (例如：1.1.1 具体任务)
 ```
 
-## 4. 鏂囨湰楂樹寒涓庡垪琛ㄦ帓鐗?
+## 4. 文本高亮与列表排版
 
-鍦ㄦ⒊鐞嗙棝鐐规垨缃楀垪鎶€鏈矾绾挎椂锛屽垪琛ㄧ幆澧冩槸鏈€甯哥敤鐨勩€?
+在梳理痛点或罗列技术路线时，列表环境是最常用的。
 
-**灞€閮ㄦ枃鏈牸寮忓寲锛?*
+**局部文本格式化：**
 
-- **鍔犵矖**锛歚\textbf{浣犵殑鏂囧瓧}`
+- **加粗**：`\textbf{你的文字}`
 
-- **涓嬪垝绾?*锛歚\underline{浣犵殑鏂囧瓧}`
+- **下划线**：`\underline{你的文字}`
 
-- **寮哄埗鎹㈣**锛氬湪琛屽熬浣跨敤 `\\`
+- **强制换行**：在行尾使用 `\\`
 
-**鏈夊簭鍒楄〃锛堝甫鏁板瓧缂栧彿锛夛細**
+**有序列表（带数字编号）：**
 
 ```latex
 \begin{enumerate}
-    \item \textbf{鐥涚偣涓€}锛氫紶缁熸柟娉曟垚鏈繃楂?..
-    \item \textbf{鐥涚偣浜寎锛氱畻娉曢噸寤洪毦搴﹀ぇ...
+    \item \textbf{痛点一}：传统方法成本过高...
+    \item \textbf{痛点二}：算法重建难度大...
 \end{enumerate}
 ```
 
-**鏃犲簭鍒楄〃锛堝甫鍦嗙偣锛夛細**
+**无序列表（带圆点）：**
 
 ```latex
 \begin{itemize}
-    \item \textbf{浜や簰鐣岄潰鑾峰彇} \\ 浣跨敤 Python 鏋勫缓鐣岄潰...
-    \item \textbf{鏅鸿兘鑸嚎瑙勫垝} \\ 璋冪敤鍦板浘 API...
+    \item \textbf{交互界面获取} \\ 使用 Python 构建界面...
+    \item \textbf{智能航线规划} \\ 调用地图 API...
 \end{itemize}
 ```
 
-## 5. 楂樼骇鍥剧墖鎻掑叆鎶€宸?
+## 5. 高级图片插入技巧
 
-浣犵殑婧愮爜涓ぇ閲忎娇鐢ㄤ簡甯?`[H]` 鍙傛暟鐨?`figure` 鐜锛岃繖鏄槻姝?LaTeX 鍥剧墖鈥滀贡璺戔€濓紙娴姩锛夌殑鏈€浣冲疄璺点€?
+你的源码中大量使用了带 `[H]` 参数的 `figure` 环境，这是防止 LaTeX 图片“乱跑”（浮动）的最佳实践。
 
 ```latex
-\begin{figure}[H] % [H] 蹇呴』閰嶅悎 float 瀹忓寘浣跨敤锛岃〃绀衡€滀弗鏍煎湪褰撳墠浣嶇疆(Here)鎻掑叆鈥?
-    \centering % 鍥剧墖灞呬腑瀵归綈
-    \includegraphics[width=0.8\textwidth]{01.png} % 瀹藉害璁句负椤甸潰鏂囨湰瀹藉害鐨?0.8 鍊?
-    \caption{鍘熺敓VGGT鍦ㄥぇ鍦烘櫙涓嬪瓨鍦ㄧ殑鍥伴毦} % 鍥剧墖涓嬫柟鐨勬爣棰樿鏄?
-    \label{fig:01} % 鎵撲笂鏍囩锛岀敤浜庢鏂囦腑鐨勪氦鍙夊紩鐢?
+\begin{figure}[H] % [H] 必须配合 float 宏包使用，表示“严格在当前位置(Here)插入”
+    \centering % 图片居中对齐
+    \includegraphics[width=0.8\textwidth]{01.png} % 宽度设为页面文本宽度的 0.8 倍
+    \caption{原生VGGT在大场景下存在的困难} % 图片下方的标题说明
+    \label{fig:01} % 打上标签，用于正文中的交叉引用
 \end{figure}
 ```
 
-> 馃挕 绠″琛ュ厖锛?
-> 鍦ㄦ鏂囦腑濡傛灉鎯冲紩鐢ㄨ繖寮犲浘锛屽彧闇€鍐?`濡傚浘 \ref{fig:01} 鎵€绀篳锛岀郴缁熶細鑷姩濉叆姝ｇ‘鐨勫浘鍙枫€?
+> 💡 管家补充：
+> 在正文中如果想引用这张图，只需写 `如图 \ref{fig:01} 所示`，系统会自动填入正确的图号。
 
-## 6. 鍙傝€冩枃鐚鐞?(BibTeX 閰嶅悎 Natbib)
+## 6. 参考文献管理 (BibTeX 配合 Natbib)
 
-褰撴枃鐚緝澶氭椂锛屼娇鐢?`.bib` 鏂囦欢鍒嗙绠＄悊鏄渶楂樻晥鐨勫仛娉曘€?
+当文献较多时，使用 `.bib` 文件分离管理是最高效的做法。
 
 ```latex
-% 寮哄埗鍒楀嚭鏈湪姝ｆ枃涓洿鎺?\cite{} 寮曠敤鐨勬枃鐚紙灏嗘墍鏈夊紩鐢ㄧ殑 key 鍒楀嚭锛?
+% 强制列出未在正文中直接 \cite{} 引用的文献（将所有引用的 key 列出）
 \nocite{lindenbergerLightGlueLocalFeature2023, liuCityGaussianRealTimeHighQuality2025}
 
-% 璁剧疆鍙傝€冩枃鐚紩鐢ㄧ殑鏍煎紡锛坓bt7714-numerical 涓哄浗鏍囨暟瀛楁牸寮忥級
+% 设置参考文献引用的格式（gbt7714-numerical 为国标数字格式）
 \bibliographystyle{gbt7714-numerical} 
 
-% 鎸囧畾瀛樻斁鏂囩尞淇℃伅鐨?.bib 鏂囦欢鍚嶇О锛堜笉闇€瑕佸姞 .bib 鍚庣紑锛?
+% 指定存放文献信息的 .bib 文件名称（不需要加 .bib 后缀）
 \bibliography{ref} 
 ```
-
-
 

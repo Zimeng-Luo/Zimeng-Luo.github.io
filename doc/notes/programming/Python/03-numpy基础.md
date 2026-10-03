@@ -1,133 +1,118 @@
 ---
-title: "03 numpy鍩虹"
+title: 03 numpy基础.md 
 date: 2026-09-02
 categories: ["笔记", "编程", "Python"]
 tags: ["Python", "编程"]
 sidebar: false
 ---
-锘?--
-title: "03 numpy鍩虹.md"
-type: reference
-status: usable
-confidence: medium
-source: self-note
-updated: 2026-09-02
-tags: ["Python", "编程"]
-  - python搴?
-  - reference
-  - python
-  - numpy
-  - 鏁扮粍
----
-# NumPy 鍩虹
 
-## 鏍稿績鎽樿
+# NumPy 基础
 
-鏈瘒鐢ㄤ簬鏌ラ槄 NumPy 鐨勬牳蹇冩暟鎹粨鏋?`ndarray`銆佸父瑙佹暟鎹被鍨嬪拰鏁扮粍灞炴€с€傞噸鐐圭悊瑙ｆ暟缁勭淮搴︺€佸舰鐘躲€佸厓绱犳暟閲忋€佹暟鎹被鍨嬪拰鍗曞厓绱犲唴瀛樺崰鐢ㄣ€?
+## 核心摘要
 
-## 1. NumPy Ndarray 瀵硅薄
+本篇用于查阅 NumPy 的核心数据结构 `ndarray`、常见数据类型和数组属性。重点理解数组维度、形状、元素数量、数据类型和单元素内存占用。
 
-`ndarray`锛圢-dimensional array锛夋槸 NumPy 涓渶鏍稿績鐨勬暟鎹粨鏋勶紝瀹冩槸涓€涓?*鍚屾瀯鐨勫缁存暟缁?*銆傝繖鎰忓懗鐫€鏁扮粍涓殑鎵€鏈夊厓绱犻兘蹇呴』鏄悓涓€绉嶆暟鎹被鍨嬶紙閫氬父鏄暟瀛楋級锛岃繖浣垮緱瀹冨湪鍐呭瓨涓繛缁垎甯冿紝璁＄畻鏁堢巼杩滆秴 Python 鍘熺敓鐨勫垪琛紙List锛夈€?
+## 1. NumPy Ndarray 对象
 
-**鏍稿績鍒涘缓鍑芥暟锛歚np.array()`**
+`ndarray`（N-dimensional array）是 NumPy 中最核心的数据结构，它是一个**同构的多维数组**。这意味着数组中的所有元素都必须是同一种数据类型（通常是数字），这使得它在内存中连续分布，计算效率远超 Python 原生的列表（List）。
+
+**核心创建函数：`np.array()`**
 
 ```python
 numpy.array(object, dtype=None, copy=True, order='K', subok=False, ndmin=0)
 ```
 
-**甯哥敤鍙傛暟瑙ｆ瀽锛?*
+**常用参数解析：**
 
-- **`object`**: 浠讳綍鏆撮湶鏁扮粍鎺ュ彛鐨勫璞★紙濡?List銆乀uple 绛夛級銆?
+- **`object`**: 任何暴露数组接口的对象（如 List、Tuple 等）。
     
-- **`dtype`**: 寮哄埗鎸囧畾鏁扮粍鐨勬暟鎹被鍨嬶紙鍙€夛級銆?
+- **`dtype`**: 强制指定数组的数据类型（可选）。
     
-- **`ndmin`**: 鎸囧畾鐢熸垚鏁扮粍鐨勬渶灏忕淮搴︼紙甯哥敤浜庡皢涓€缁存暟鎹己鍒惰浆涓轰簩缁存垨澶氱淮锛夈€?
+- **`ndmin`**: 指定生成数组的最小维度（常用于将一维数据强制转为二维或多维）。
     
 
-**浠ｇ爜绀轰緥锛?*
+**代码示例：**
 
 ```python
 import numpy as np
 
-# 1. 浠庡垪琛ㄥ垱寤轰竴缁存暟缁?
+# 1. 从列表创建一维数组
 arr1 = np.array([1, 2, 3])
 print(arr1)
 
-# 2. 浠庡祵濂楀垪琛ㄥ垱寤轰簩缁存暟缁?
+# 2. 从嵌套列表创建二维数组
 arr2 = np.array([[1, 2], [3, 4]])
 print(arr2)
 
-# 3. 浣跨敤 ndmin 寮哄埗鎸囧畾鏈€灏忕淮搴︼紙渚嬪灏嗕竴缁村垪琛ㄨ浆涓轰簩缁存暟缁勶級
+# 3. 使用 ndmin 强制指定最小维度（例如将一维列表转为二维数组）
 arr3 = np.array([1, 2, 3], ndmin=2)
-print(arr3)  # 杈撳嚭: [[1 2 3]]
+print(arr3)  # 输出: [[1 2 3]]
 ```
 
-## 2. NumPy 鏁版嵁绫诲瀷 (Data Types)
+## 2. NumPy 数据类型 (Data Types)
 
-涓轰簡鏇寸簿缁嗗湴鎺у埗鍐呭瓨骞舵彁鍗囪绠楁€ц兘锛孨umPy 鎻愪緵浜嗘瘮 Python 鍘熺敓绫诲瀷锛坄int`, `float`锛変赴瀵屽緱澶氱殑鏁版嵁绫诲瀷锛堝 8浣嶃€?6浣嶃€?2浣嶃€?4浣嶇殑鏁存暟鎴栨诞鐐规暟锛夈€?
+为了更精细地控制内存并提升计算性能，NumPy 提供了比 Python 原生类型（`int`, `float`）丰富得多的数据类型（如 8位、16位、32位、64位的整数或浮点数）。
 
-**甯哥敤鏁版嵁绫诲瀷锛?*
+**常用数据类型：**
 
-- **甯冨皵鍨?*: `bool_`
+- **布尔型**: `bool_`
     
-- **鏁村瀷**: `int8`, `int16`, `int32`, `int64` (鏃犵鍙锋暣鍨嬪姞 `u`鍓嶇紑锛屽 `uint8`)
+- **整型**: `int8`, `int16`, `int32`, `int64` (无符号整型加 `u`前缀，如 `uint8`)
     
-- **娴偣鍨?*: `float16`, `float32`, `float64`
+- **浮点型**: `float16`, `float32`, `float64`
     
-- **澶嶆暟鍨?*: `complex64`, `complex128`
+- **复数型**: `complex64`, `complex128`
     
 
-**鏁版嵁绫诲瀷瀵硅薄 (dtype)锛?*
+**数据类型对象 (dtype)：**
 
-姣忎釜 `ndarray` 閮芥湁涓€涓叧鑱旂殑 `dtype` 瀵硅薄銆備綘鍙互鍦ㄥ垱寤烘暟缁勬椂鏄惧紡鎸囧畾瀹冿紝涔熷彲浠ョ敤瀹冩潵瀹氫箟缁撴瀯鍖栨暟鎹€?
+每个 `ndarray` 都有一个关联的 `dtype` 对象。你可以在创建数组时显式指定它，也可以用它来定义结构化数据。
 
-**浠ｇ爜绀轰緥锛?*
+**代码示例：**
 
 ```python
 import numpy as np
 
-# 1. 鍒涘缓鏁扮粍鏃舵樉寮忔寚瀹氭暟鎹被鍨嬩负 32 浣嶆诞鐐规暟
+# 1. 创建数组时显式指定数据类型为 32 位浮点数
 arr_float = np.array([1, 2, 3], dtype=np.float32)
-print(arr_float)      # 杈撳嚭: [1. 2. 3.]
-print(arr_float.dtype) # 杈撳嚭: float32
+print(arr_float)      # 输出: [1. 2. 3.]
+print(arr_float.dtype) # 输出: float32
 
-# 2. 绫诲瀷绠€鍐欙紙'i1'浠ｈ〃int8, 'i4'浠ｈ〃int32, 'f4'浠ｈ〃float32锛?
+# 2. 类型简写（'i1'代表int8, 'i4'代表int32, 'f4'代表float32）
 arr_int = np.array([1, 2, 3], dtype='i1') 
-print(arr_int.dtype)   # 杈撳嚭: int8
+print(arr_int.dtype)   # 输出: int8
 ```
 
-## 3. NumPy 鏁扮粍灞炴€?(Array Attributes)
+## 3. NumPy 数组属性 (Array Attributes)
 
-浜嗚В鏁扮粍鐨勫睘鎬э紝鍙互甯姪鎴戜滑蹇€熸帉鎻＄煩闃电殑褰㈢姸鍜屾暟鎹噺銆傝繖涔熸槸鍦ㄨ繘琛屾暟缁勫舰鐘跺彉鎹紙濡?`reshape`锛変箣鍓嶅繀椤昏妫€鏌ョ殑淇℃伅銆?
+了解数组的属性，可以帮助我们快速掌握矩阵的形状和数据量。这也是在进行数组形状变换（如 `reshape`）之前必须要检查的信息。
 
-**鏍稿績灞炴€у垪琛細**
+**核心属性列表：**
 
-- **`ndarray.ndim`**: 绉╋紝鍗宠酱鐨勬暟閲忥紙缁村害鏁帮級銆備竴缁存暟缁勭З涓?锛屼簩缁存暟缁勶紙鐭╅樀锛夌З涓?銆?
+- **`ndarray.ndim`**: 秩，即轴的数量（维度数）。一维数组秩为1，二维数组（矩阵）秩为2。
     
-- **`ndarray.shape`**: 鏁扮粍鐨勭淮搴︼紝杩斿洖涓€涓厓缁勩€備緥濡傚浜?`n` 琛?`m` 鍒楃殑鐭╅樀锛宍shape` 涓?`(n, m)`銆?
+- **`ndarray.shape`**: 数组的维度，返回一个元组。例如对于 `n` 行 `m` 列的矩阵，`shape` 为 `(n, m)`。
     
-- **`ndarray.size`**: 鏁扮粍鍏冪礌鐨勬€讳釜鏁帮紝绛変簬 `shape` 灞炴€т腑鍚勪釜鍏冪粍鍏冪礌鐨勪箻绉€?
+- **`ndarray.size`**: 数组元素的总个数，等于 `shape` 属性中各个元组元素的乘积。
     
-- **`ndarray.dtype`**: 鏁扮粍涓厓绱犵殑鏁版嵁绫诲瀷銆?
+- **`ndarray.dtype`**: 数组中元素的数据类型。
     
-- **`ndarray.itemsize`**: 鏁扮粍涓瘡涓厓绱犲崰鐢ㄥ唴瀛樼殑澶у皬锛屼互瀛楄妭锛圔yte锛変负鍗曚綅锛堜緥濡?`int8` 涓?1锛宍float64` 涓?8锛夈€?
+- **`ndarray.itemsize`**: 数组中每个元素占用内存的大小，以字节（Byte）为单位（例如 `int8` 为 1，`float64` 为 8）。
     
 
-**浠ｇ爜绀轰緥锛?*
+**代码示例：**
 
 ```python
 import numpy as np
 
-# 鍒涘缓涓€涓?2 琛?3 鍒楃殑浜岀淮鏁扮粍锛岀被鍨嬩负 int32 (鍗犵敤 4 瀛楄妭)
+# 创建一个 2 行 3 列的二维数组，类型为 int32 (占用 4 字节)
 arr = np.array([[1, 2, 3], [4, 5, 6]], dtype=np.int32)
 
-print(f"鏁扮粍鍐呭:\n{arr}")
-print(f"缁村害鏁?(ndim): {arr.ndim}")          # 杈撳嚭: 2
-print(f"鏁扮粍褰㈢姸 (shape): {arr.shape}")        # 杈撳嚭: (2, 3)
-print(f"鍏冪礌鎬绘暟 (size): {arr.size}")          # 杈撳嚭: 6
-print(f"鏁版嵁绫诲瀷 (dtype): {arr.dtype}")        # 杈撳嚭: int32
-print(f"鍗曞厓绱犲瓧鑺傚ぇ灏?(itemsize): {arr.itemsize}") # 杈撳嚭: 4
+print(f"数组内容:\n{arr}")
+print(f"维度数 (ndim): {arr.ndim}")          # 输出: 2
+print(f"数组形状 (shape): {arr.shape}")        # 输出: (2, 3)
+print(f"元素总数 (size): {arr.size}")          # 输出: 6
+print(f"数据类型 (dtype): {arr.dtype}")        # 输出: int32
+print(f"单元素字节大小 (itemsize): {arr.itemsize}") # 输出: 4
 ```
-
-
 

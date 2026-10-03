@@ -1,52 +1,38 @@
 ---
-title: "01 Docker"
+title: 01 Docker
 date: 2026-09-02
 categories: ["分享", "工具", "开发工具"]
 tags: ["开发工具", "工具"]
 sidebar: false
 ---
-锘?--
-title: "01 Docker"
-type: reference
-status: usable
-confidence: medium
-source: self-note
-updated: 2026-09-02
-tags: ["开发工具", "工具"]
-  - docker
-  - reference
-  - 寮€鍙戝伐鍏?
-  - 鎿嶄綔绯荤粺
-  - 瀹瑰櫒
-  - 鎿嶄綔鍩虹
----
-# Docker 鍩虹
 
-## 鏍稿績鎽樿
+# Docker 基础
 
-鏈瘒鐢ㄤ簬鏌ラ槄 Docker 鐨勬渶灏忎娇鐢ㄦ祦绋嬶紝鍖呮嫭闀滃儚銆佸鍣ㄣ€佹媺鍙栭暅鍍忋€佽繍琛屽鍣ㄣ€佹煡鐪嬪鍣ㄣ€佽繘鍏ュ鍣ㄣ€佺洰褰曟寕杞藉拰甯歌鏄撻敊鐐广€?
+## 核心摘要
 
-## 1. 鏈€灏忓績鏅烘ā鍨?
+本篇用于查阅 Docker 的最小使用流程，包括镜像、容器、拉取镜像、运行容器、查看容器、进入容器、目录挂载和常见易错点。
 
-鍏堣浣忎袱涓牳蹇冩蹇碉細
+## 1. 最小心智模型
 
-- 闀滃儚 `image`锛氫竴涓彲澶嶇敤鐨勭幆澧冩ā鏉裤€?
-- 瀹瑰櫒 `container`锛氶暅鍍忓惎鍔ㄥ悗瀹為檯杩愯鐨勮繘绋嬪疄渚嬨€?
+先记住两个核心概念：
 
-鍙互鍏堟妸瀹冪悊瑙ｆ垚锛?
+- 镜像 `image`：一个可复用的环境模板。
+- 容器 `container`：镜像启动后实际运行的进程实例。
 
-- 闀滃儚鍍忊€滄ā鍏封€濄€?
-- 瀹瑰櫒鍍忊€滄寜妯″叿鍚姩鍑烘潵鐨勮繍琛屽疄渚嬧€濄€?
+可以先把它理解成：
 
-## 2. Docker 鍦ㄥ涔犻樁娈电殑涓昏浠峰€?
+- 镜像像“模具”。
+- 容器像“按模具启动出来的运行实例”。
 
-- 蹇€熷鐜板埆浜虹殑鐜銆?
-- 鍑忓皯鈥滄垜杩欓噷鑳借窇銆佷綘閭ｉ噷涓嶈兘璺戔€濈殑闂銆?
-- 涓嶆妸鏈満 Python 鐜瓒婅瓒婁贡銆?
+## 2. Docker 在学习阶段的主要价值
 
-## 3. 瀹夎鍚庣殑绗竴妫€鏌?
+- 快速复现别人的环境。
+- 减少“我这里能跑、你那里不能跑”的问题。
+- 不把本机 Python 环境越装越乱。
 
-瀹夎 Docker 鍚庡厛妫€鏌ワ細
+## 3. 安装后的第一检查
+
+安装 Docker 后先检查：
 
 ```bash
 docker --version
@@ -54,40 +40,40 @@ docker version
 docker info
 ```
 
-濡傛灉杩欎簺鍛戒护鑳芥甯歌繑鍥烇紝璇存槑 Docker 鍩烘湰鍙敤銆?
+如果这些命令能正常返回，说明 Docker 基本可用。
 
 ## 4. `docker pull`
 
-浣滅敤锛氫粠闀滃儚浠撳簱鎷夊彇闀滃儚銆?
+作用：从镜像仓库拉取镜像。
 
 ```bash
 docker pull ubuntu:22.04
 docker pull pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
 ```
 
-浣犲彧瑕佸厛璁颁綇锛?
+你只要先记住：
 
-- 鍓嶅崐娈垫槸闀滃儚鍚嶃€?
-- 鍚庡崐娈靛啋鍙峰悗闈㈤€氬父鏄爣绛?`tag`銆?
+- 前半段是镜像名。
+- 后半段冒号后面通常是标签 `tag`。
 
 ## 5. `docker run`
 
-浣滅敤锛氬惎鍔ㄤ竴涓鍣ㄣ€?
+作用：启动一个容器。
 
-鏈€灏忎緥瀛愶細
+最小例子：
 
 ```bash
 docker run -it ubuntu:22.04 bash
 ```
 
-甯歌鍙傛暟锛?
+常见参数：
 
-- `-i`锛氫繚鎸佹爣鍑嗚緭鍏ユ墦寮€銆?
-- `-t`锛氬垎閰嶄竴涓粓绔€?
-- `--rm`锛氶€€鍑哄悗鑷姩鍒犻櫎瀹瑰櫒銆?
-- `--name`锛氱粰瀹瑰櫒璧峰悕瀛椼€?
+- `-i`：保持标准输入打开。
+- `-t`：分配一个终端。
+- `--rm`：退出后自动删除容器。
+- `--name`：给容器起名字。
 
-渚嬪锛?
+例如：
 
 ```bash
 docker run --rm -it --name my-ubuntu ubuntu:22.04 bash
@@ -95,96 +81,94 @@ docker run --rm -it --name my-ubuntu ubuntu:22.04 bash
 
 ## 6. `docker ps`
 
-浣滅敤锛氭煡鐪嬫鍦ㄨ繍琛岀殑瀹瑰櫒銆?
+作用：查看正在运行的容器。
 
 ```bash
 docker ps
 docker ps -a
 ```
 
-鍖哄垎锛?
+区分：
 
-- `docker ps`锛氬彧鐪嬫鍦ㄨ繍琛岀殑瀹瑰櫒銆?
-- `docker ps -a`锛氱湅鎵€鏈夊鍣紝鍖呮嫭宸茬粡閫€鍑虹殑銆?
+- `docker ps`：只看正在运行的容器。
+- `docker ps -a`：看所有容器，包括已经退出的。
 
 ## 7. `docker exec`
 
-浣滅敤锛氳繘鍏ュ凡缁忓湪杩愯涓殑瀹瑰櫒锛屾垨鍦ㄥ叾涓墽琛屽懡浠ゃ€?
+作用：进入已经在运行中的容器，或在其中执行命令。
 
 ```bash
 docker exec -it my-ubuntu bash
 docker exec my-ubuntu ls /workspace
 ```
 
-閫傜敤鍦烘櫙锛?
+适用场景：
 
-- 瀹瑰櫒宸茬粡鍦ㄥ悗鍙拌窇鐫€銆?
-- 浣犳兂杩涘幓鐪嬫枃浠躲€佹煡鏃ュ織銆佽ˉ鎵ц鍛戒护銆?
+- 容器已经在后台跑着。
+- 你想进去看文件、查日志、补执行命令。
 
-## 8. 鎸傝浇鏈湴鐩綍鍒板鍣?
+## 8. 挂载本地目录到容器
 
-杩欐槸瀛︿範闃舵闈炲父閲嶈鐨勪竴姝ャ€? 
-濡傛灉涓嶆寕杞斤紝鏈湴鏀圭殑浠ｇ爜涓嶄細鑷姩鍑虹幇鍦ㄥ鍣ㄩ噷銆?
+这是学习阶段非常重要的一步。  
+如果不挂载，本地改的代码不会自动出现在容器里。
 
-Linux / macOS 甯歌鍐欐硶锛?
+Linux / macOS 常见写法：
 
 ```bash
 docker run --rm -it -v $(pwd):/workspace ubuntu:22.04 bash
 ```
 
-PowerShell 甯歌鍐欐硶锛?
+PowerShell 常见写法：
 
 ```powershell
 docker run --rm -it -v ${PWD}:/workspace ubuntu:22.04 bash
 ```
 
-鍚箟鏄細
+含义是：
 
-- 鎶婂綋鍓嶆湰鍦扮洰褰曟寕杞藉埌瀹瑰櫒閲岀殑 `/workspace`
-- 杩欐牱浣犲湪鏈湴缂栬緫浠ｇ爜锛屽鍣ㄩ噷鑳界洿鎺ョ湅鍒?
+- 把当前本地目录挂载到容器里的 `/workspace`
+- 这样你在本地编辑代码，容器里能直接看到
 
-## 9. 鍦ㄥ鍣ㄩ噷璺戜竴涓渶灏?PyTorch 绋嬪簭
+## 9. 在容器里跑一个最小 PyTorch 程序
 
-濡傛灉浣犲彧鎯冲厛璺戦€氫竴涓渶灏忕ず渚嬶紝鍙互鐩存帴浣跨敤 PyTorch 瀹樻柟闀滃儚鎬濊矾锛?
+如果你只想先跑通一个最小示例，可以直接使用 PyTorch 官方镜像思路：
 
 ```bash
 docker run --rm -it pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python -c "import torch; print(torch.__version__)"
 ```
 
-濡傛灉瑕佷娇鐢ㄦ湰鏈?GPU锛屽父瑙佸啓娉曟槸锛?
+如果要使用本机 GPU，常见写法是：
 
 ```bash
 docker run --rm -it --gpus all pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python -c "import torch; print(torch.cuda.is_available())"
 ```
 
-濡傛灉瑕佹妸褰撳墠椤圭洰鐩綍鎸傝繘鍘讳竴璧疯窇锛?
+如果要把当前项目目录挂进去一起跑：
 
-Linux / macOS锛?
+Linux / macOS：
 
 ```bash
 docker run --rm -it --gpus all -v $(pwd):/workspace -w /workspace pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python demo.py
 ```
 
-PowerShell锛?
+PowerShell：
 
 ```powershell
 docker run --rm -it --gpus all -v ${PWD}:/workspace -w /workspace pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python demo.py
 ```
 
-鍏朵腑锛?
+其中：
 
-- `-v 鏈湴鐩綍:/workspace`锛氭寕杞戒唬鐮佺洰褰?
-- `-w /workspace`锛氭妸瀹瑰櫒鍐呭伐浣滅洰褰曞垏鍒?`/workspace`
-- `--gpus all`锛氭妸鍙敤 GPU 鏆撮湶缁欏鍣?
+- `-v 本地目录:/workspace`：挂载代码目录
+- `-w /workspace`：把容器内工作目录切到 `/workspace`
+- `--gpus all`：把可用 GPU 暴露给容器
 
-## 10. Docker 閲屾渶瀹规槗閿欑殑鐐?
+## 10. Docker 里最容易错的点
 
-- 鍒嗕笉娓呴暅鍍忓拰瀹瑰櫒銆?
-- 浠ヤ负閫€鍑哄鍣ㄥ氨绛変簬鍒犻櫎闀滃儚銆?
-- 娌℃寕杞芥湰鍦扮洰褰曪紝缁撴灉瀹瑰櫒閲屾敼鐨勫唴瀹规壘涓嶅埌銆?
-- 瀹瑰櫒閲岃矾寰勫拰鏈湴璺緞娣锋穯銆?
-- 鎯崇敤 GPU锛屽嵈蹇樹簡鍔?`--gpus all`銆?
-- 鎶婂鍣ㄥ綋铏氭嫙鏈虹敤锛屼粈涔堥兘鎵嬪伐瑁咃紝浣嗕笉璁板綍杩囩▼銆?
-
-
+- 分不清镜像和容器。
+- 以为退出容器就等于删除镜像。
+- 没挂载本地目录，结果容器里改的内容找不到。
+- 容器里路径和本地路径混淆。
+- 想用 GPU，却忘了加 `--gpus all`。
+- 把容器当虚拟机用，什么都手工装，但不记录过程。
 

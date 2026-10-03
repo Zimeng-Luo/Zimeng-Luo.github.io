@@ -1,100 +1,87 @@
 ---
-title: "02 cmake涓巊++"
+title: 02 cmake与g++
 date: 2026-09-02
 categories: ["笔记", "编程", "C++"]
 tags: ["C++", "编程"]
 sidebar: false
 ---
-锘?--
-title: "02 cmake涓巊++"
-type: reference
-status: usable
-confidence: medium
-source: self-note
-updated: 2026-09-02
-tags: ["C++", "编程"]
-  - c++鍩虹
-  - reference
-  - cmake
-  - 鏋勫缓绯荤粺
-  - gcc鍛戒护
----
-# CMake 涓?g++
 
-## 鏍稿績鎽樿
+# CMake 与 g++
 
-`g++` 璐熻矗缂栬瘧锛孋Make 璐熻矗缁勭粐鏋勫缓銆傝繖閲屾妸涓よ€呮斁鍦ㄤ竴璧凤紝鎸夆€滅洿鎺ョ紪璇?-> CMake 鏋勫缓 -> 澶氭枃浠堕」鐩?-> include 鐩綍 -> 甯哥敤閫夐」鈥濇潵鏌ユ渶鐪佷簨銆?
+## 核心摘要
 
-## 1. g++ 閫熸煡
+`g++` 负责编译，CMake 负责组织构建。这里把两者放在一起，按“直接编译 -> CMake 构建 -> 多文件项目 -> include 目录 -> 常用选项”来查最省事。
 
-鏌ョ湅鐗堟湰锛?
+## 1. g++ 速查
+
+查看版本：
 
 ```powershell
 g++ -v
 ```
 
-鏈€绠€鍗曠殑缂栬瘧锛?
+最简单的编译：
 
 ```powershell
 g++ helloworld.cpp
 ./a.out
 ```
 
-鎸囧畾杈撳嚭鍚嶏細
+指定输出名：
 
 ```powershell
 g++ helloworld.cpp -o helloworld
 ./helloworld
 ```
 
-澶氭枃浠剁紪璇戯細
+多文件编译：
 
 ```powershell
 g++ runoob1.cpp runoob2.cpp -o runoob
 ```
 
-甯﹁皟璇曚俊鎭拰甯哥敤璀﹀憡锛?
+带调试信息和常用警告：
 
 ```powershell
 g++ -g -Wall -std=c++11 main.cpp
 ```
 
-濡傛灉鐢?`gcc` 缂?C++锛岄€氬父闇€瑕佹墜鍔ㄩ摼鎺ユ爣鍑嗗簱锛?
+如果用 `gcc` 编 C++，通常需要手动链接标准库：
 
 ```powershell
 gcc main.cpp -lstdc++ -o main
 ```
 
-甯哥敤閫夐」锛?
+常用选项：
 
-- `-c` 鍙紪璇戯紝涓嶉摼鎺?
-- `-o FILE` 鎸囧畾杈撳嚭鏂囦欢
-- `-I DIR` 娣诲姞澶存枃浠舵悳绱㈣矾寰?
-- `-L DIR` 娣诲姞搴撴悳绱㈣矾寰?
-- `-l LIB` 閾炬帴鎸囧畾搴?
-- `-g` 鐢熸垚璋冭瘯淇℃伅
-- `-O0/-O2/-O3` 鎺у埗浼樺寲绾у埆
-- `-std=c++11` 鎸囧畾璇█鏍囧噯
+- `-c` 只编译，不链接
+- `-o FILE` 指定输出文件
+- `-I DIR` 添加头文件搜索路径
+- `-L DIR` 添加库搜索路径
+- `-l LIB` 链接指定库
+- `-g` 生成调试信息
+- `-O0/-O2/-O3` 控制优化级别
+- `-std=c++11` 指定语言标准
 
-## 2. CMake 鍦ㄥ仛浠€涔?
+## 2. CMake 在做什么
 
-CMake 涓嶆槸缂栬瘧鍣ㄣ€傚畠鏍规嵁 `CMakeLists.txt` 鐢熸垚鏋勫缓瑙勫垯锛屽啀浜ょ粰 `g++`銆乣clang++` 鎴?MSVC 鍘荤湡姝ｇ紪璇戙€?
+CMake 不是编译器。它根据 `CMakeLists.txt` 生成构建规则，再交给 `g++`、`clang++` 或 MSVC 去真正编译。
 
 ```text
-C++ 婧愮爜
+C++ 源码
   -> CMakeLists.txt
-  -> CMake 鐢熸垚鏋勫缓绯荤粺
+  -> CMake 生成构建系统
   -> Ninja / Make / Visual Studio
-  -> 缂栬瘧鍣?
-  -> 鍙墽琛屾枃浠?/ 搴?
+  -> 编译器
+  -> 可执行文件 / 库
 ```
 
-## 3. 鏈€灏?CMake 椤圭洰
+## 3. 最小 CMake 项目
 
 ```text
 hello_cmake/
-鈹溾攢鈹€ CMakeLists.txt
-鈹斺攢鈹€ main.cpp
+├── CMakeLists.txt
+└── main.cpp
 ```
 
 `CMakeLists.txt`
@@ -107,7 +94,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(hello main.cpp)
 ```
 
-鏋勫缓鍜岃繍琛岋細
+构建和运行：
 
 ```powershell
 mkdir build
@@ -117,14 +104,14 @@ cmake --build .
 .\hello.exe
 ```
 
-## 4. 澶氭枃浠堕」鐩?
+## 4. 多文件项目
 
 ```text
 my_project/
-鈹溾攢鈹€ CMakeLists.txt
-鈹溾攢鈹€ main.cpp
-鈹溾攢鈹€ math_utils.cpp
-鈹斺攢鈹€ math_utils.h
+├── CMakeLists.txt
+├── main.cpp
+├── math_utils.cpp
+└── math_utils.h
 ```
 
 `CMakeLists.txt`
@@ -140,18 +127,18 @@ add_executable(my_app
 )
 ```
 
-鍙妸鍙備笌缂栬瘧鐨?`.cpp` 鍐欒繘 `add_executable`銆?
+只把参与编译的 `.cpp` 写进 `add_executable`。
 
-## 5. include 鐩綍
+## 5. include 目录
 
 ```text
 my_project/
-鈹溾攢鈹€ CMakeLists.txt
-鈹溾攢鈹€ include/
-鈹?  鈹斺攢鈹€ math_utils.h
-鈹斺攢鈹€ src/
-    鈹溾攢鈹€ main.cpp
-    鈹斺攢鈹€ math_utils.cpp
+├── CMakeLists.txt
+├── include/
+│   └── math_utils.h
+└── src/
+    ├── main.cpp
+    └── math_utils.cpp
 ```
 
 `CMakeLists.txt`
@@ -168,9 +155,9 @@ add_executable(my_app
 target_include_directories(my_app PRIVATE include)
 ```
 
-`target_include_directories` 鐢ㄦ潵鍛婅瘔缂栬瘧鍣ㄥ幓鍝噷鎵惧ご鏂囦欢銆?
+`target_include_directories` 用来告诉编译器去哪里找头文件。
 
-## 6. Debug 涓?Release
+## 6. Debug 与 Release
 
 ```powershell
 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug
@@ -182,10 +169,10 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
-- Debug: 渚夸簬璋冭瘯
-- Release: 寮€鍚紭鍖栵紝杩愯鏇村揩
+- Debug: 便于调试
+- Release: 开启优化，运行更快
 
-## 7. 甯哥敤閫熸煡
+## 7. 常用速查
 
 ```powershell
 cmake -S . -B build-ucrt -G "MinGW Makefiles" `
@@ -202,6 +189,4 @@ cd build
 cmake .. -G Ninja
 cmake --build .
 ```
-
-
 
