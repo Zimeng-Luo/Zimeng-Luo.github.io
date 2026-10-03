@@ -76,7 +76,7 @@ export const teekConfig = defineTeekConfig({
     enabled: true,
   },
   breadcrumb: {
-    enabled: false,
+    enabled: true,
   },
   sidebarTrigger: false,
   backTop: {
