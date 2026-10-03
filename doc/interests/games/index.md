@@ -1,6 +1,5 @@
----
-title: 游戏与娱乐
-layout: home
+﻿---
+title: "娓告垙涓庡ū涔?layout: home"
 post:
   postStyle: list
 categoriesPage: true
@@ -9,4 +8,5 @@ features: false
 sidebar: false
 homeCardListPosition: false
 ---
+
 

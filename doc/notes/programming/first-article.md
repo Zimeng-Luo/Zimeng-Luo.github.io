@@ -1,16 +1,16 @@
----
-title: 编程实践入门
+﻿---
+title: "缂栫▼瀹炶返鍏ラ棬"
 date: 2026-10-03
 categories:
-  - 笔记
-  - 编程
+  - 绗旇
+  - 缂栫▼
 tags:
-  - 编程
+  - 缂栫▼
 coverImg: /blog/bg2.webp
 sidebar: false
 ---
 
-# 编程实践入门
+# 缂栫▼瀹炶返鍏ラ棬
 
-这里是笔记分类下的第一篇文章示例。后续文章可以继续放在 `doc/notes/programming/` 目录中。
+杩欓噷鏄瑪璁板垎绫讳笅鐨勭涓€绡囨枃绔犵ず渚嬨€傚悗缁枃绔犲彲浠ョ户缁斁鍦?`doc/notes/programming/` 鐩綍涓€?
 

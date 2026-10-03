@@ -1,0 +1,14 @@
+/* Keep list cards stable with the cover image on the left. */
+.tk-post-item-list .list {
+  flex-direction: row-reverse;
+}
+
+.tk-post-item-list .tk-post-item-list__right .cover-img {
+  clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+}
+
+@media (max-width: 640px) {
+  .tk-post-item-list .list {
+    flex-direction: row;
+  }
+}
