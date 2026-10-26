@@ -9,63 +9,240 @@ tags:
   - 实验复现
 coverImg: /blog/bg17.jpg
 sidebar: false
-description: "掌握 math 的数值约定与 random 的采样边界，避免舍入和随机种子的误用。"
+description: "Python math 库、Python 随机数的学习笔记。"
 ---
 
 # Python 数值工具与可复现抽样
 
-数值计算的结果不仅由公式决定，也由数据表示、舍入方式与随机状态决定。标准库 `math` 和 `random` 适合标量计算与小规模采样；数组任务可交给 NumPy。
+## Python math 库
 
-## 舍入的方向要明确
+### 1. 核心数学常量 (Constants)
+
+`math` 模块内置了几个我们在数学计算中极常用的常量，使用它们比你自己手动输入精确得多。
+
+- **`math.pi`**: 圆周率 $\pi$，大约等于 3.141592653589793。
+    
+- **`math.e`**: 自然对数的底数 $e$，大约等于 2.718281828459045。
+    
+- **`math.inf`**: 正无穷大。常用于在算法（如寻找最小值）中初始化一个极大的对比值。如果是负无穷大，可以使用 `-math.inf`。
+    
+- **`math.nan`**: 非数字 (Not a Number)，通常用于表示未定义或不可表示的结果。
+    
+
+**代码示例：**
 
 ```python
 import math
 
-print(math.floor(-2.7))  # -3
-print(math.ceil(-2.7))   # -2
-print(math.trunc(-2.7))  # -2
-print(round(2.5), round(3.5))  # 2 4
+print(math.pi)
+print(math.inf > 999999999) # 输出: True
 ```
 
-`round` 对恰好居中的值采用向偶数舍入，还会受二进制浮点表示影响，不是简单的十进制“四舍五入”。金额等精确十进制任务可用 `decimal` 并明确舍入规则。
+### 2. 数值处理与舍入 (Rounding & Absolute)
 
-`math.pow` 转为浮点运算，`**` 在整数指数等情况下可以保留整数结果。`sqrt`、`log` 有定义域限制；`sin`、`cos`、`tan` 接收弧度，可用 `radians` 和 `degrees` 转换。`factorial` 处理非负整数，`gcd` 处理整数的最大公约数。
+虽然 Python 内置了 `round()` 和 `abs()`，但 `math` 模块提供了更精细的控制，特别是在处理浮点数时。
+
+- **`math.ceil(x)`**: 向上取整，返回大于或等于 x 的最小整数。
+    
+- **`math.floor(x)`**: 向下取整，返回小于或等于 x 的最大整数。
+    
+- **`math.trunc(x)`**: 截断 x 的小数部分，只保留整数部分。
+    
+- **`math.fabs(x)`**: 返回 x 的绝对值。与内置的 `abs()` 不同，`math.fabs()` **总是返回浮点数**。
+    
+
+**代码示例：**
 
 ```python
-angle = math.radians(30)
-print(math.isclose(math.sin(angle), 0.5))
+import math
+
+x = 4.2
+y = -4.8
+
+print("向上取整 (ceil):", math.ceil(x))   # 输出: 5
+print("向下取整 (floor):", math.floor(y)) # 输出: -5
+print("截断小数 (trunc):", math.trunc(y)) # 输出: -4
+print("绝对值 (fabs):", math.fabs(-10))   # 输出: 10.0
 ```
 
-浮点比较使用适当的相对和绝对容差。接近零时尤其要考虑 `abs_tol`；NaN 不等于自身，应使用 `math.isnan` 检测。
+### 3. 幂运算与对数 (Power & Logarithmic)
 
-## 用独立随机生成器保存状态
+- **`math.pow(x, y)`**: 返回 x 的 y 次方。虽然和 `x ** y` 类似，但 `math.pow()` 会将参数转换为浮点数，并**始终返回浮点数**。
+    
+- **`math.sqrt(x)`**: 返回 x 的平方根。
+    
+- **`math.exp(x)`**: 返回 $e^x$ （`math.e` 的 x 次方）。
+    
+- **`math.log(x, [base])`**: 返回 x 的对数。如果不传 `base`，默认返回自然对数（以 e 为底）。如果传入 `base`，则返回以 `base` 为底的对数。
+    
+- **`math.log10(x)`**: 相当于 `math.log(x, 10)` 的快捷方式，返回以 10 为底的对数。
+    
+
+**代码示例：**
+
+```python
+import math
+
+print("平方根:", math.sqrt(16))      # 输出: 4.0
+print("幂运算:", math.pow(2, 3))     # 输出: 8.0
+print("以2为底的对数:", math.log(8, 2)) # 输出: 3.0
+```
+
+### 4. 三角函数与角度转换 (Trigonometry)
+
+⚠️ `math` 模块中所有的三角函数（sin, cos, tan 等），它们接收的参数都是**弧度 (Radians)**
+- **角度与弧度互转**：
+    
+    - **`math.radians(x)`**: 将角度 x 转换为弧度。
+        
+    - **`math.degrees(x)`**: 将弧度 x 转换为角度。
+        
+- **三角函数**：
+    
+    - **`math.sin(x)`**: 返回 x（弧度）的正弦值。
+        
+    - **`math.cos(x)`**: 返回 x（弧度）的余弦值。
+        
+    - **`math.tan(x)`**: 返回 x（弧度）的正切值。
+        
+
+**代码示例：**
+
+```python
+import math
+
+# 错误做法：直接传入角度 30，结果是不对的
+# print(math.sin(30)) 
+
+# 正确做法：先将 30 度转为弧度，再求正弦值
+angle = 30
+radians = math.radians(angle)
+sin_value = math.sin(radians)
+
+# 因为浮点数精度问题，结果可能是 0.49999999999999994
+print(f"30度的正弦值: {sin_value}")
+```
+
+### 5. 实用特殊函数
+
+- **`math.factorial(x)`**: 返回 x 的阶乘（x!）。x 必须是正整数或 0，否则会报错 `ValueError`。
+    
+- **`math.gcd(a, b)`**: 返回整数 a 和 b 的最大公约数 (Greatest Common Divisor)。
+    
+
+**代码示例：**
+
+```python
+import math
+
+print("5的阶乘:", math.factorial(5)) # 输出: 120 (即 5*4*3*2*1)
+print("12和18的最大公约数:", math.gcd(12, 18)) # 输出: 6
+```
+
+---
+
+## Python 随机数
+
+### 1. 导入模块
+
+在使用任何随机数函数之前，必须先导入模块：
 
 ```python
 import random
-
-rng = random.Random(42)
-items = ["A", "B", "C", "D"]
-print(rng.randint(1, 6))
-print(rng.sample(items, k=2))
 ```
 
-独立 `Random` 实例减少模块间共享全局随机状态的干扰。相同种子、相同调用次序及兼容实现可重现序列；改变抽样顺序也会改变后续结果。
+### 2. 生成随机整数
 
-| 方法 | 抽样约定 |
-| --- | --- |
-| `randint(a,b)` | 整数闭区间 |
-| `randrange(start,stop,step)` | 从 range 对应序列抽样，终点不包含 |
-| `random()` | `[0,1)` 的浮点数 |
-| `uniform(a,b)` | 区间浮点抽样，浮点舍入可能影响端点 |
-| `choice(seq)` | 从非空序列取一个元素 |
-| `choices(seq,k,weights)` | 可按权重有放回抽样 |
-| `sample(seq,k)` | 按位置无放回抽样 |
-| `shuffle(seq)` | 原地打乱，返回 None |
+这是最常用的场景，比如摇骰子或随机抽号。
 
-如果原序列中有相同的值，无放回按位置抽样仍可能抽到两个相同值。无放回样本之间也不是相互独立的抽取。
+- **`random.randint(a, b)`**: 返回一个在 `[a, b]` 范围内的整数（**包含边界 a 和 b**）。
+    
+```python
+    num = random.randint(1, 10)  # 结果可能是 1 到 10 之间的任意整数（包括 1 和 10）
+    print("randint(1, 10):", num)
+```
+    
+- **`random.randrange(start, stop[, step])`**: 返回一个在 `range(start, stop, step)` 中的随机整数。**不包含 stop**。
+    
+```python
+    # 生成 0 到 99 之间的随机偶数
+    num = random.randrange(0, 100, 2) 
+    print("randrange(0, 100, 2):", num)
+```
 
-## 可复现不是只固定一个 seed
+### 3. 生成随机浮点数 (小数)
 
-实验记录应包括数据版本、随机种子、库版本、调用顺序和并行设置。标准库、NumPy 和训练框架通常有各自随机状态，只给 `random` 播种不会控制所有库。某些并行算法即使种子相同也可能有非确定性。
+- **`random.random()`**: 返回一个在 `[0.0, 1.0)` 范围内的随机浮点数（包含 0.0，不包含 1.0）。
 
-随机数用于模拟和实验；安全令牌使用 `secrets`，例如 `secrets.token_urlsafe()`。不要把伪随机序列可复现的性质当成安全随机性。
+```python
+    num = random.random()
+    print("random():", num)  # 例如: 0.37444887175646646
+```
+    
+- **`random.uniform(a, b)`**: 返回一个在 `[a, b]` 范围内的随机浮点数。无论 `a` 和 `b` 哪个大，结果都在它们之间。
+```python
+    num = random.uniform(1.5, 5.5)
+    print("uniform(1.5, 5.5):", num) # 例如: 3.1415926...
+```
+    
+
+### 4. 序列相关的随机操作
+
+Python 提供了非常方便的函数直接从序列中随机抽取。
+
+- **`random.choice(seq)`**: 从非空序列（如列表、元组、字符串）中随机**抽取一个**元素。
+
+```python
+    fruits = ['apple', 'banana', 'cherry', 'durian']
+    print("choice:", random.choice(fruits))
+```
+    
+- **`random.choices(seq, weights=None, k=1)`**: 从序列中抽取 `k` 个元素，**有放回抽样**（元素可能重复）。可以设置权重 `weights`。
+```python
+    # 抽取 3 个水果，可能有重复
+    print("choices:", random.choices(fruits, k=3)) 
+    # 按照权重抽取（抽中 apple 的概率是 banana 的 10 倍）
+    print("choices(带权重):", random.choices(['apple', 'banana'], weights=[10, 1], k=5))
+```
+    
+- **`random.sample(seq, k)`**: 从序列中随机抽取 `k` 个**独立的**元素，**无放回抽样**（元素不会重复）。
+
+```python
+    # 随机抽取 2 个不同的水果
+    print("sample:", random.sample(fruits, 2)) 
+```
+    
+- **`random.shuffle(x)`**: 将序列 `x` 中的元素**原地打乱**（注意：它会修改原列表，且没有返回值）。
+    
+```python
+    cards = [1, 2, 3, 4, 5]
+    random.shuffle(cards)
+    print("shuffle:", cards) # 例如: [3, 1, 5, 2, 4]
+```
+    
+
+### 5. 随机数种子 (Seed)
+
+计算机生成的实际上是“伪随机数”。如果初始种子相同，每次生成的随机数序列也会完全相同。这在调试或需要可重复结果（如机器学习实验）时非常有用。
+
+- **`random.seed(a=None)`**: 初始化随机数生成器。如果省略参数或为 `None`，通常使用当前系统时间。
+```python
+    random.seed(42) # 设置固定的种子
+    print(random.random()) # 0.6394267984578837
+    
+    random.seed(42) # 再次设置相同的种子
+    print(random.random()) # 依然是 0.6394267984578837
+```
+    
+
+### 6. 重要补充
+
+1. **安全领域的随机数**：`random` 模块生成的伪随机数是**不安全**的，不能用于加密、生成密码或安全 Token。对于涉及安全的场景，必须使用 Python 的 **`secrets`** 模块。
+    
+    ```python
+    import secrets
+    # 生成一个安全的 8 字符随机密码
+    password = ''.join(secrets.choice("abcdefghijklmnopqrstuvwxyz0123456789") for i in range(8))
+    ```
+    
+2. **科学计算与大数据**：如果你需要生成大型数组、矩阵或特定概率分布（如正态分布、泊松分布）的随机数，通常使用 **`numpy.random`** 模块，它的性能比内置的 `random` 高得多。

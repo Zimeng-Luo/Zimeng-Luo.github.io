@@ -9,79 +9,386 @@ tags:
   - 环境排查
 coverImg: /blog/bg30.jpg
 sidebar: false
-description: "围绕远程任务完整流程，合并文件权限、服务器操作与压缩解压笔记。"
+description: "文件与权限、服务器操作、压缩与解压的学习笔记。"
 ---
 
 # Linux 服务器工作流：权限、传输、会话与任务管理
 
-基础终端操作已有[专门笔记](./终端基础命令.md)。本文继续处理远程开发常见问题：为什么文件不能访问、任务断线后是否继续、结果怎样可靠传回本机。
+## 文件与权限
 
-## 文件权限先看对象类型
+### 1. 文件、目录、软链接分别是什么
+- 文件：存数据的基本单位，比如代码、日志、图片、模型权重。
+- 目录：装文件的“容器”，本质上是名字到对象的映射。
+- 软链接：一个指向目标路径的特殊文件，类似快捷方式。
 
-`ls -l` 的第一位区分普通文件、目录和软链接，其余三组三位分别表示拥有者、同组用户和其他用户的读、写、执行权限。
+### 2. 软链接和普通文件的区别
+- 普通文件保存的是内容本身。
+- 软链接保存的是“目标路径”。
+- 目标文件删掉后，软链接会失效。
+
+### 3. 权限位怎么看
+执行 `ls -l` 时，你会看到类似：
 
 ```bash
-ls -l run.sh
+-rwxr-xr--
+drwxr-xr-x
+lrwxrwxrwx
+```
+
+第一位代表类型：
+- `-` 普通文件
+- `d` 目录
+- `l` 软链接
+
+后面九位分三组：
+- 拥有者权限
+- 同组用户权限
+- 其他用户权限
+
+每组三位分别表示：
+- `r` 读
+- `w` 写
+- `x` 执行
+
+### 4. `chmod` 怎么用
+`chmod` 用来改权限，常见有两种写法：
+
+```bash
+chmod 755 run.sh
 chmod u+x run.sh
 ```
 
-文件的 x 表示可执行；目录的 x 表示可以按路径访问目录内对象，r 用于列出名称，w 用于更改目录条目。删除文件主要取决于父目录权限，还可能受粘滞位等限制，不能只看文件是否可写。
+数字写法里：
+- `r = 4`
+- `w = 2`
+- `x = 1`
 
-软链接保存目标路径，目标消失时成为失效链接。检查命令来源可用 `command -v python` 或 `which python`；Shell 内建命令和别名需要结合 `type` 判断。PATH 的前后顺序决定同名可执行文件的优先级。
+所以：
+- `7 = rwx`
+- `6 = rw-`
+- `5 = r-x`
+- `4 = r--`
 
-## 登录与传输
+目录和文件的 `x` 含义不一样：
+- 对文件：可执行
+- 对目录：可进入、可访问里面的内容
+
+### 5. `which`、环境变量和 `PATH`
+`which` 用来找命令实际在哪个路径里。
 
 ```bash
-ssh -p 2222 user@host
-scp -P 2222 result.txt user@host:/remote/path/
-rsync -avP -e 'ssh -p 2222' results/ user@host:/remote/path/results/
+which python
+which pip
+which ssh
 ```
 
-SSH 的端口选项是小写 `-p`，SCP 是大写 `-P`。首次连接核对主机指纹；密钥用 `-i` 指定。登录后先确认 `hostname`、工作目录和账户，避免在错误机器上处理任务。
+如果系统找得到这个命令，说明它在 `PATH` 里。`PATH` 是 shell 查找命令时的搜索列表，通常用冒号分隔。
 
-`rsync` 源路径末尾的斜杠决定复制目录内容还是目录本身；`-a` 尽量保留属性，`-P` 表示保留部分传输并显示进度。同步前可加 `--dry-run` 检查计划，不为简单复制顺手添加删除选项。
+查看环境变量：
 
-## 用 tmux 管理长任务
+```bash
+echo $PATH
+printenv PATH
+env | grep PATH
+```
+
+临时加路径：
+
+```bash
+export PATH="$HOME/bin:$PATH"
+```
+
+---
+
+## 服务器操作
+
+### 1. 连接服务器
+
+| 任务 | 命令 |
+| --- | --- |
+| 默认登录 | `ssh user@host` |
+| 指定端口 | `ssh -p 2222 user@host` |
+| 指定密钥 | `ssh -i ~/.ssh/id_rsa user@host` |
+
+登录后先检查：
+
+```bash
+hostname
+pwd
+nvidia-smi
+```
+
+### 2. 文件传输
+
+#### 2.1 `scp`：单次复制
+
+适合传少量文件。
+
+```bash
+scp local.txt user@host:/remote/path/
+scp user@host:/remote/path/remote.txt .
+scp -r mydir user@host:/remote/path/
+```
+
+#### 2.2 `rsync`：增量同步
+
+适合反复同步项目目录。
+
+```bash
+rsync -avP mydir/ user@host:/remote/path/mydir/
+```
+
+| 参数 | 含义 |
+| --- | --- |
+| `-a` | 归档模式，保留主要文件属性 |
+| `-v` | 显示同步过程 |
+| `-P` | 显示进度，支持断点续传 |
+
+### 3. `tmux`：断线保活
+
+`tmux` 能让 SSH 断开后任务继续运行。
 
 ```bash
 tmux new -s train
-# 运行自己的任务后，用 Ctrl-b 再按 d 分离
 tmux ls
 tmux attach -t train
+tmux kill-session -t train
 ```
 
-分离会话不终止任务，关闭会话则可能结束其中任务。tmux 保持的是终端会话，不会使机器重启、程序崩溃或资源耗尽变得无关紧要。
+| 操作 | 说明 |
+| --- | --- |
+| `tmux new -s train` | 新建名为 `train` 的会话 |
+| `Ctrl-b d` | 分离会话，不结束任务 |
+| `tmux ls` | 查看会话 |
+| `tmux attach -t train` | 重新进入会话 |
+| `tmux kill-session -t train` | 关闭会话 |
 
-## 查看自己的进程再决定处理
+### 4. 进程查看与终止
+
+#### 4.1 查看进程
 
 ```bash
-ps -u "$USER" -f
-ps -p 12345 -o pid,ppid,user,stat,cmd
-top -u "$USER"
+ps -ef | grep python
+ps aux | grep train.py
+ps -u $USER -f
+ps -o user= -p PID
+ps x
+top
+htop
 ```
 
-示例 PID 只是占位，需替换成实际值。结束前确认命令、用户和归属，通常先发送 TERM，让程序有机会清理；确认卡死且无正常退出方式后才考虑 KILL。
+| 命令 | 用途 |
+| --- | --- |
+| `ps` | 查指定进程是否存在 |
+| `ps -u $USER -f` | 查看当前账号的进程，包含 PPID、启动时间和完整命令 |
+| `ps -o user= -p PID` | 只输出指定 PID 所属用户，适合共享服务器上确认进程归属 |
+| `ps x` | 查看自己拥有的所有进程，包含后台进程 |
+| `top` / `htop` | 实时查看 CPU、内存和进程占用 |
 
-僵尸进程已经退出，等待父进程回收状态，不能直接杀掉它。应定位 PPID，检查父进程的 `wait/waitpid` 逻辑。给父进程发送 SIGCHLD 只有在它具有正确处理逻辑时才可能有帮助，不能保证自动回收。不要把终止父进程写成无需诊断的固定步骤。
+只看当前账号的动态资源占用：
 
-## GPU 选择是可见性设置
+```bash
+top -u $USER
+htop -u $USER
+```
+
+统计或搜索自己的进程：
+
+```bash
+ps -u $USER | wc -l
+ps -u $USER -f | grep python
+```
+
+`ps -u $USER | wc -l` 的结果通常比实际进程数多 1，因为包含标题行。
+
+确认某个进程属于谁：
+
+```bash
+ps -o user= -p <PID>
+```
+
+`user=` 会去掉标题行，只保留用户名。共享服务器上结束进程前应先确认 PID 是否属于自己。
+
+#### 4.2 结束进程
+
+先温和结束，再强制结束。
+
+```bash
+kill PID
+kill -9 PID
+```
+
+### 5. 僵尸进程
+
+僵尸进程是已经结束、但父进程还未回收退出状态的子进程，状态通常是 `Z` 或 `<defunct>`。它不再消耗 CPU，但会占用进程表项。
+
+处理原则：
+
+- 不直接 `kill` 僵尸进程本身，因为它已经结束。
+- 先找到父进程 `PPID`，确认父进程身份。
+- 优先让父进程回收；必要时终止异常父进程。
+
+最小排查流程：
+
+```bash
+ps -A -o stat,pid,ppid,cmd | grep -e '^[Zz]'
+ps -p PPID -o pid,ppid,user,stat,cmd
+kill -s SIGCHLD PPID
+kill PPID
+kill -9 PPID
+```
+
+| 步骤          | 说明                            |
+| ----------- | ----------------------------- |
+| 查 `Z` 进程    | 重点记录 `PPID`                   |
+| 查父进程        | 确认是否是自己的任务或脚本                 |
+| 发 `SIGCHLD` | 尝试让父进程回收子进程                   |
+| 终止父进程       | 父进程卡死时再用，先 `kill` 后 `kill -9` |
+
+如果大量反复出现僵尸进程，根因通常是程序没有正确调用 `wait()` / `waitpid()` 或处理 `SIGCHLD`。
+
+### 6. GPU 查看与选卡
+
+#### 6.1 查看 GPU
 
 ```bash
 nvidia-smi
+```
+
+重点看：
+
+- 哪张 GPU 空闲
+- 剩余显存
+- 当前进程和用户
+
+#### 6.2 单卡或指定多卡
+
+```bash
 CUDA_VISIBLE_DEVICES=2 python train.py
+CUDA_VISIBLE_DEVICES=1,3 python train.py
+```
+
+设定 `CUDA_VISIBLE_DEVICES=1,3` 后，程序内的 `cuda:0` 指可见列表里的第 1 张卡，也就是物理 1 号卡。
+
+#### 6.3 PyTorch 多卡训练
+
+前提是代码本身支持多卡。
+
+```bash
 CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2 train.py
 ```
 
-设置可见设备后，程序内部设备编号重新从 0 开始。多卡启动要求训练代码本身支持分布式，设置变量不等于自动并行。共享机器要确认 GPU 资源安排，不只看某一瞬间显存为空。
+| 参数 | 含义 |
+| --- | --- |
+| `CUDA_VISIBLE_DEVICES=0,1` | 只让程序看到 0、1 两张卡 |
+| `--nproc_per_node=2` | 启动 2 个进程，通常每进程 1 张卡 |
 
-## 压缩包先查看再解压
+简单单进程多卡也可能使用：
 
-| 格式 | 查看内容 | 解压 |
+```python
+model = torch.nn.DataParallel(model)
+```
+
+工程中更常见的是 `torchrun` 分布式训练。
+
+---
+
+## 压缩与解压
+
+### 1. 常用解压命令
+
+| 文件类型 | 解压命令 | 说明 |
 | --- | --- | --- |
-| tar / tar.gz | `tar -tf archive.tar.gz` | `tar -xzf archive.tar.gz -C target` |
-| zip | `unzip -l archive.zip` | `unzip archive.zip -d target` |
-| 7z | `7z l archive.7z` | `7z x archive.7z -otarget` |
+| `.tar` | `tar -xvf file.tar` | 只打包，未压缩 |
+| `.tar.gz` / `.tgz` | `tar -xzvf file.tar.gz` | gzip 压缩 |
+| `.tar.bz2` | `tar -xjvf file.tar.bz2` | bzip2 压缩 |
+| `.tar.xz` | `tar -xJvf file.tar.xz` | xz 压缩 |
+| `.zip` | `unzip file.zip` | 常见跨平台压缩包 |
+| `.gz` | `gunzip file.gz` | 解压单个文件 |
+| `.bz2` | `bunzip2 file.bz2` | 解压单个文件 |
+| `.xz` | `unxz file.xz` | 解压单个文件 |
+| `.7z` | `7z x file.7z` | 保留目录结构 |
+| `.rar` | `unrar x file.rar` | 保留目录结构 |
 
-目标目录需先存在或由工具创建。`.tar` 仅打包，gzip、bzip2、xz 对应不同压缩方式。中文文件名乱码可能是编码差异，`unzip -O` 并非所有实现支持，先确认工具版本再选择处理方式。
+### 2. 解压到指定目录
 
-工作流的重点是明确机器、目录、资源和结果位置，再使用对应工具，避免只记命令却不知道它实际操作的对象。
+#### `tar`
+
+```bash
+mkdir -p target_dir
+tar -xzvf file.tar.gz -C target_dir
+```
+
+#### `zip`
+
+```bash
+mkdir -p target_dir
+unzip file.zip -d target_dir
+```
+
+#### `7z`
+
+```bash
+mkdir -p target_dir
+7z x file.7z -otarget_dir
+```
+
+注意：`7z` 的 `-o` 和目录名之间通常不加空格。
+
+### 3. 先查看压缩包内容
+
+| 文件类型 | 查看命令 |
+| --- | --- |
+| `.tar` / `.tar.gz` / `.tar.bz2` / `.tar.xz` | `tar -tf file.tar.gz` |
+| `.zip` | `unzip -l file.zip` |
+| `.7z` | `7z l file.7z` |
+| `.rar` | `unrar l file.rar` |
+
+建议先查看内容，避免压缩包直接把大量文件解到当前目录。
+
+### 4. 常用参数理解
+
+#### `tar` 参数
+
+| 参数 | 含义 |
+| --- | --- |
+| `-x` | extract，解包 |
+| `-v` | verbose，显示过程 |
+| `-f` | file，指定文件名 |
+| `-z` | gzip |
+| `-j` | bzip2 |
+| `-J` | xz |
+| `-C` | 解压到指定目录 |
+
+#### `zip` 参数
+
+| 参数 | 含义 |
+| --- | --- |
+| `-d` | 解压到指定目录 |
+| `-l` | 只列出内容 |
+| `-q` | 静默模式，减少输出 |
+| `-O` | 指定文件名编码 |
+
+### 5. 中文文件名乱码
+
+如果 `.zip` 解压后中文文件名乱码，可以尝试：
+
+```bash
+unzip -O GBK file.zip
+```
+
+如果系统没有 `unzip`、`7z` 或 `unrar`，先安装工具：
+
+```bash
+sudo apt install unzip p7zip-full unrar
+```
+
+### 6. 压缩命令速查
+
+| 目标格式       | 压缩命令                                    |
+| ---------- | --------------------------------------- |
+| `.tar.gz`  | `tar -czvf archive.tar.gz dir_or_file`  |
+| `.tar.bz2` | `tar -cjvf archive.tar.bz2 dir_or_file` |
+| `.tar.xz`  | `tar -cJvf archive.tar.xz dir_or_file`  |
+| `.zip`     | `zip -r archive.zip dir_or_file`        |
+| `.7z`      | `7z a archive.7z dir_or_file`           |

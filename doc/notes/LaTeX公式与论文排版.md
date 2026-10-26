@@ -9,95 +9,267 @@ tags:
   - 文档排版
 coverImg: /blog/bg33.jpg
 sidebar: false
-description: "把公式速查和论文骨架合并，使用自包含语法示例替代缺失截图。"
+description: "LaTeX 公式、LaTeX 语法的学习笔记。"
 ---
 
 # LaTeX 写作：公式、文档结构与参考文献
 
-LaTeX 适合让公式、章节、图表和文献引用保持一致。网页中的公式片段与完整论文文档不同：前者由网页渲染器决定支持范围，后者由 TeX 编译系统处理。
+## LaTeX 公式
 
-## 公式先写结构，再写符号
+### 1. 简介
 
-行内公式常用 `$…$`，独立公式在许多 Markdown 数学扩展中用 `$$…$$`；完整 LaTeX 文档则优先用 `\(...\)`、`\[...\]` 或公式环境。
-
-| 需求 | LaTeX 源码 |
-| --- | --- |
-| 上下标 | `x_i`、`x^{n+1}` |
-| 分数、根号 | `\frac{a}{b}`、`\sqrt{x}` |
-| 求和、积分 | `\sum_{i=1}^{n}`、`\int_0^1 f(x)\,dx` |
-| 比较 | `\le`、`\ge`、`\ne` |
-| 希腊字母 | `\alpha`、`\gamma`、`\Sigma` |
-| 向量与粗体 | `\mathbf{x}`、`\boldsymbol{\theta}` |
-| 箭头 | `\to`、`\Rightarrow` |
-
-多字符上下标使用大括号分组。矩阵和多行公式可用 amsmath 的环境：
+**行内公式**（与文字在同一行）：
 
 ```latex
-\begin{aligned}
-v_\pi &= r_\pi + \gamma P_\pi v_\pi \\
-(I-\gamma P_\pi)v_\pi &= r_\pi
-\end{aligned}
+勾股定理：$a^2 + b^2 = c^2$ 是几何学基本定理。
 ```
 
-`\\` 换行，`&` 设置对齐点。不要用空格对齐公式。编号可用 `equation` 环境和 `\label`，特殊编号使用 `\tag`，是否支持仍依环境而定。
+勾股定理：  $ a^2+b^2 = c^2$是几何学基本定理。
 
-## 一个中文文档骨架
+**独立公式**（单独成行，居中显示）：
 
 ```latex
-\documentclass[UTF8,a4paper]{ctexart}
-\usepackage{amsmath,graphicx,geometry}
-\geometry{margin=2.5cm}
-\title{学习笔记}
-\author{作者}
-\date{\today}
-
-\begin{document}
-\maketitle
-\section{问题背景}
-这里是正文。
-\begin{equation}
+$$
 E = mc^2
-\label{eq:energy}
-\end{equation}
-见公式~\ref{eq:energy}。
-\end{document}
+$$
 ```
 
-示例通常使用 XeLaTeX 或 LuaLaTeX 等支持中文的配置，实际字体与宏包还依本机或 Overleaf 环境。`ctexart` 比把中文选项直接塞进普通 `article` 更明确。
+$$
+E=mc^2
+$$
 
-## 章节、列表和图表
+### 2. 标号
 
-章节用 `section`、`subsection`，列表用 `itemize` 或 `enumerate`；让系统维护编号，不手写“图 3”后又忘记同步。
+使用`\tag{}`来进行标号
+
+### 3. 基本数学符号
+
+#### 3.1 操作符
+
+
+原笔记图片：`2026-03-28-16-32-44-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-33-27-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-33-43-image.png`（该图片未随压缩包提供。）
+
+
+#### 3.2 关系符
+
+
+原笔记图片：`../assets/2026-03-28-16-34-12-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-34-22-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-34-33-image.png`（该图片未随压缩包提供。）
+
+
+只要将\not放在符号前面或者在 \ 和单词之间插入一个 n ，就可以形成许多这些关系的否定形式
+
+#### 3.3 希腊字母
+
+
+原笔记图片：`2026-03-28-16-35-38-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-35-47-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-36-01-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-36-10-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-36-34-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-36-46-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-36-54-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-37-01-image.png`（该图片未随压缩包提供。）
+
+
+#### 3.4 加粗
+
+使用 `\boldsymbol{}` 或 `\mathbf{}` 对公式中的符号进行加粗。
+
+#### 3.5 箭头
+
+
+原笔记图片：`2026-03-28-16-39-09-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-39-19-image.png`（该图片未随压缩包提供。）
+
+
+#### 3.6 上标
+
+
+原笔记图片：`2026-03-28-16-39-42-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-39-50-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-39-58-image.png`（该图片未随压缩包提供。）
+
+
+#### 3.7 跨行符号
+
+
+原笔记图片：`2026-03-28-16-42-48-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-43-04-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-43-16-image.png`（该图片未随压缩包提供。）
+
+
+
+原笔记图片：`2026-03-28-16-44-13-image.png`（该图片未随压缩包提供。）
+
+---
+
+## LaTeX 语法
+
+### 1. 文档基础骨架
+
+任何一个标准的 LaTeX 文档都由**导言区**（Preamble，用于全局设置和引入宏包）和**正文区**（Document Environment）组成。
 
 ```latex
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{example.png}
-  \caption{图像说明}
-  \label{fig:example}
+% --- 导言区开始 ---
+\documentclass[12pt,a4paper,UTF8]{article} % 12号字体，A4纸张，UTF-8编码，article类
+\usepackage{ctex} % 必须引入，用于支持中文排版
+% ... 此处引入其他宏包 ...
+% --- 导言区结束 ---
+
+% --- 正文区开始 ---
+\begin{document}
+
+% 你的论文正文内容写在这里
+
+\end{document}
+% --- 正文区结束 ---
+```
+
+### 2. 常用必备宏包（Packages）
+
+根据你的源码，以下是你写论文时通常需要配置的宏包及功能说明：
+
+| **宏包代码**                                     | **核心作用**                           |
+| -------------------------------------------- | ---------------------------------- |
+| `\usepackage{amsmath}`                       | 提供高级数学公式排版支持。                      |
+| `\usepackage{graphicx}`                      | 允许插入图片（配合 `\includegraphics` 使用）。  |
+| `\usepackage{float}`                         | 提供严格的图表位置控制（如强制固定在当前位置的 `[H]` 参数）。 |
+| `\usepackage{geometry}`                      | 用于自定义页面边距。                         |
+| `\usepackage[numbers,sort&compress]{natbib}` | 强大的参考文献管理，支持数字标号和连续序号压缩（如 [1-3]）。  |
+| `\usepackage{url}`                           | 允许在参考文献或正文中格式化显示和点击 URL 链接。        |
+
+**页面边距设置示例：**
+
+```latex
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+```
+
+### 3. 标题与多级结构
+
+LaTeX 会自动为你处理章节编号和字体大小。
+
+```latex
+% --- 论文大标题自定义居中 ---
+\begin{center}
+    \textbf{\huge 立项报告} % \huge 表示超大号字体，\textbf 为加粗
+\end{center}
+\vspace{1em} % 手动增加 1em 的垂直空白间距
+
+% --- 章节层级 ---
+\section{立项背景}       % 一级标题 (例如：1 立项背景)
+\subsection{阶段一}      % 二级标题 (例如：1.1 阶段一)
+\subsubsection{具体任务} % 三级标题 (例如：1.1.1 具体任务)
+```
+
+### 4. 文本高亮与列表排版
+
+在梳理痛点或罗列技术路线时，列表环境是最常用的。
+
+**局部文本格式化：**
+
+- **加粗**：`\textbf{你的文字}`
+
+- **下划线**：`\underline{你的文字}`
+
+- **强制换行**：在行尾使用 `\\`
+
+**有序列表（带数字编号）：**
+
+```latex
+\begin{enumerate}
+    \item \textbf{痛点一}：传统方法成本过高...
+    \item \textbf{痛点二}：算法重建难度大...
+\end{enumerate}
+```
+
+**无序列表（带圆点）：**
+
+```latex
+\begin{itemize}
+    \item \textbf{交互界面获取} \\ 使用 Python 构建界面...
+    \item \textbf{智能航线规划} \\ 调用地图 API...
+\end{itemize}
+```
+
+### 5. 高级图片插入技巧
+
+你的源码中大量使用了带 `[H]` 参数的 `figure` 环境，这是防止 LaTeX 图片“乱跑”（浮动）的最佳实践。
+
+```latex
+\begin{figure}[H] % [H] 必须配合 float 宏包使用，表示“严格在当前位置(Here)插入”
+    \centering % 图片居中对齐
+    \includegraphics[width=0.8\textwidth]{01.png} % 宽度设为页面文本宽度的 0.8 倍
+    \caption{原生VGGT在大场景下存在的困难} % 图片下方的标题说明
+    \label{fig:01} % 打上标签，用于正文中的交叉引用
 \end{figure}
 ```
 
-`example.png` 只是源码示例中的占位文件，编译时需准备实际图片。`label` 放在 caption 之后，正文通过 `ref` 引用。`[htbp]` 让系统寻找合适浮动位置；`[H]` 需要 float 宏包且强制固定，不应把它当成所有论文排版的默认最佳方案。
+管家补充：
+在正文中如果想引用这张图，只需写 `如图 \ref{fig:01} 所示`，系统会自动填入正确的图号。
 
-## 参考文献按模板选择体系
+### 6. 参考文献管理 (BibTeX 配合 Natbib)
 
-传统 BibTeX 与 natbib 的示例为：
+当文献较多时，使用 `.bib` 文件分离管理是最高效的做法。
 
 ```latex
-\usepackage[numbers,sort&compress]{natbib}
-% 正文：相关研究见 \cite{paper_key}。
-% 文末：
-\bibliographystyle{plainnat}
-\bibliography{references}
+% 强制列出未在正文中直接 \cite{} 引用的文献（将所有引用的 key 列出）
+\nocite{lindenbergerLightGlueLocalFeature2023, liuCityGaussianRealTimeHighQuality2025}
+
+% 设置参考文献引用的格式（gbt7714-numerical 为国标数字格式）
+\bibliographystyle{gbt7714-numerical} 
+
+% 指定存放文献信息的 .bib 文件名称（不需要加 .bib 后缀）
+\bibliography{ref} 
 ```
-
-文献信息放在 `references.bib`。期刊或学校要求国标格式时，选择其支持的样式与宏包；biblatex/biber 是另一套体系，不应把两套命令随意混用。
-
-`nocite` 用于明确列出未在正文引用的条目，不能代替真正的引文论证。检查引用 key、作者、标题和年份，以及最终样式；链接存在不代表文献信息准确。
-
-## 编译与网页显示的边界
-
-完整文档可能需要 LaTeX、BibTeX、再次 LaTeX 的多轮编译来解析交叉引用，编辑平台往往会自动处理。网页公式渲染通常只支持数学命令的一部分，不执行完整文档或加载任意宏包。
-
-因此，把一份论文迁移到博客时，应保留推导结构，按目标页面能力展示公式。本次数学文章采用直接可读的文本公式，避免通过修改站点配置来超出文章编辑范围。

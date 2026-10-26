@@ -1,5 +1,5 @@
 ---
-title: "Docker 开发实践：镜像、容器、挂载与 GPU"
+title: "Docker 基础"
 date: 2026-10-13
 categories:
   - 笔记
@@ -9,14 +9,32 @@ tags:
   - 容器使用
 coverImg: /blog/bg31.jpg
 sidebar: false
-description: "从一次运行到可复现工作流，说明文件持久化、容器生命周期和 GPU 前提。"
+description: "Docker 基础的学习笔记。"
 ---
 
-# Docker 开发实践：镜像、容器、挂载与 GPU
+# Docker 基础
 
-Docker 镜像是可复用模板，容器是根据镜像启动的隔离进程实例。它们可以帮助复现依赖环境，但运行配置、数据路径与宿主资源仍要明确。
+## 1. 最小心智模型
 
-## 先确认客户端和服务端
+先记住两个核心概念：
+
+- 镜像 `image`：一个可复用的环境模板。
+- 容器 `container`：镜像启动后实际运行的进程实例。
+
+可以先把它理解成：
+
+- 镜像像“模具”。
+- 容器像“按模具启动出来的运行实例”。
+
+## 2. Docker 在学习阶段的主要价值
+
+- 快速复现别人的环境。
+- 减少“我这里能跑、你那里不能跑”的问题。
+- 不把本机 Python 环境越装越乱。
+
+## 3. 安装后的第一检查
+
+安装 Docker 后先检查：
 
 ```bash
 docker --version
@@ -24,59 +42,134 @@ docker version
 docker info
 ```
 
-客户端存在不等于 Docker 服务端可用。Linux、Docker Desktop 和远程 daemon 的连接方式可能不同；理解当前连接哪个 daemon，才能确定容器在哪里运行。
+如果这些命令能正常返回，说明 Docker 基本可用。
 
-## 一次性的交互容器
+## 4. `docker pull`
+
+作用：从镜像仓库拉取镜像。
 
 ```bash
 docker pull ubuntu:22.04
-docker run --rm -it --name practice ubuntu:22.04 bash
+docker pull pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
 ```
 
-`-i` 保持输入，`-t` 分配终端，`--rm` 在容器退出后移除容器，`--name` 指定名称。退出不会删除镜像。标签可随发布变化，严格复现时记录镜像 digest 及平台架构。
+你只要先记住：
+
+- 前半段是镜像名。
+- 后半段冒号后面通常是标签 `tag`。
+
+## 5. `docker run`
+
+作用：启动一个容器。
+
+最小例子：
+
+```bash
+docker run -it ubuntu:22.04 bash
+```
+
+常见参数：
+
+- `-i`：保持标准输入打开。
+- `-t`：分配一个终端。
+- `--rm`：退出后自动删除容器。
+- `--name`：给容器起名字。
+
+例如：
+
+```bash
+docker run --rm -it --name my-ubuntu ubuntu:22.04 bash
+```
+
+## 6. `docker ps`
+
+作用：查看正在运行的容器。
 
 ```bash
 docker ps
 docker ps -a
-docker exec -it practice bash
 ```
 
-`exec` 要求容器已经在运行；示例中的 `practice` 退出并自动删除后就不能再进入。需要长期运行时，应选择持续运行的进程与相应生命周期管理方式。
+区分：
 
-## 挂载决定数据存在哪里
+- `docker ps`：只看正在运行的容器。
+- `docker ps -a`：看所有容器，包括已经退出的。
+
+## 7. `docker exec`
+
+作用：进入已经在运行中的容器，或在其中执行命令。
+
+```bash
+docker exec -it my-ubuntu bash
+docker exec my-ubuntu ls /workspace
+```
+
+适用场景：
+
+- 容器已经在后台跑着。
+- 你想进去看文件、查日志、补执行命令。
+
+## 8. 挂载本地目录到容器
+
+这是学习阶段非常重要的一步。  
+如果不挂载，本地改的代码不会自动出现在容器里。
+
+Linux / macOS 常见写法：
+
+```bash
+docker run --rm -it -v $(pwd):/workspace ubuntu:22.04 bash
+```
+
+PowerShell 常见写法：
+
+```powershell
+docker run --rm -it -v ${PWD}:/workspace ubuntu:22.04 bash
+```
+
+含义是：
+
+- 把当前本地目录挂载到容器里的 `/workspace`
+- 这样你在本地编辑代码，容器里能直接看到
+
+## 9. 在容器里跑一个最小 PyTorch 程序
+
+如果你只想先跑通一个最小示例，可以直接使用 PyTorch 官方镜像思路：
+
+```bash
+docker run --rm -it pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python -c "import torch; print(torch.__version__)"
+```
+
+如果要使用本机 GPU，常见写法是：
+
+```bash
+docker run --rm -it --gpus all pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python -c "import torch; print(torch.cuda.is_available())"
+```
+
+如果要把当前项目目录挂进去一起跑：
 
 Linux / macOS：
 
 ```bash
-docker run --rm -it \
-  -v "$PWD:/workspace" -w /workspace \
-  ubuntu:22.04 bash
+docker run --rm -it --gpus all -v $(pwd):/workspace -w /workspace pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python demo.py
 ```
 
 PowerShell：
 
 ```powershell
-docker run --rm -it -v "${PWD}:/workspace" -w /workspace ubuntu:22.04 bash
+docker run --rm -it --gpus all -v ${PWD}:/workspace -w /workspace pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime python demo.py
 ```
 
-绑定挂载让宿主目录出现在容器中；写入挂载目录会改变宿主文件。仅写容器的可写层，在容器删除后就会丢失；需要持久化的路径应使用绑定挂载或命名卷。
+其中：
 
-挂载某个路径会遮蔽镜像中该路径原来的内容，不是自动合并。还要考虑宿主与容器的用户 ID、权限及路径解析，避免结果文件变成当前用户无法修改。
+- `-v 本地目录:/workspace`：挂载代码目录
+- `-w /workspace`：把容器内工作目录切到 `/workspace`
+- `--gpus all`：把可用 GPU 暴露给容器
 
-## GPU 有额外前提
+## 10. Docker 里最容易错的点
 
-```bash
-docker run --rm --gpus all \
-  pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime \
-  python -c "import torch; print(torch.cuda.is_available())"
-```
-
-这是原资料使用的示例镜像标签，不代表最新或适用于所有机器。运行要求宿主有兼容 GPU 与驱动，并完成 NVIDIA Container Toolkit 等必要配置。镜像里存在 CUDA 库，不等于宿主 GPU 已正确暴露。
-
-挂载项目并运行时，仍需要设置工作目录 `-w`，镜像的运行时版本与项目依赖也应匹配。容器没有把代码变成自动多卡程序。
-
-## 将手工过程变成可重复配置
-
-学习时可以交互探索，长期项目则把依赖写进 Dockerfile 或已有项目配置，并保存启动参数、挂载位置、环境变量需求和检查方式。凭据不写进镜像或文章示例。
-
-镜像解决基础运行环境，项目锁文件解决具体依赖版本，数据版本和启动命令决定最终实验。三者都明确，才能减少“同一镜像却结果不同”的问题。
+- 分不清镜像和容器。
+- 以为退出容器就等于删除镜像。
+- 没挂载本地目录，结果容器里改的内容找不到。
+- 容器里路径和本地路径混淆。
+- 想用 GPU，却忘了加 `--gpus all`。
+- 把容器当虚拟机用，什么都手工装，但不记录过程。
